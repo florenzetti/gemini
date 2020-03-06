@@ -22,7 +22,7 @@ namespace Gemini.Modules.Explorer.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace Gemini.Modules.Explorer.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Gemini.Modules.Explorer.Properties.Resources", typeof(Resources).Assembly);
@@ -51,7 +51,7 @@ namespace Gemini.Modules.Explorer.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Close folder.
         /// </summary>
-        internal static string CloseFolderCommandText {
+        public static string CloseFolderCommandText {
             get {
                 return ResourceManager.GetString("CloseFolderCommandText", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Close folder.
         /// </summary>
-        internal static string CloseFolderCommandToolTip {
+        public static string CloseFolderCommandToolTip {
             get {
                 return ResourceManager.GetString("CloseFolderCommandToolTip", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Explorer.
         /// </summary>
-        internal static string ExplorerViewModel_ExplorerViewModel_Explorer {
+        public static string ExplorerViewModel_ExplorerViewModel_Explorer {
             get {
                 return ResourceManager.GetString("ExplorerViewModel_ExplorerViewModel_Explorer", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Open folder.
         /// </summary>
-        internal static string OpenFolderCommandText {
+        public static string OpenFolderCommandText {
             get {
                 return ResourceManager.GetString("OpenFolderCommandText", resourceCulture);
             }
@@ -99,7 +99,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Open folder.
         /// </summary>
-        internal static string OpenFolderCommandToolTip {
+        public static string OpenFolderCommandToolTip {
             get {
                 return ResourceManager.GetString("OpenFolderCommandToolTip", resourceCulture);
             }
@@ -108,7 +108,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Explorer.
         /// </summary>
-        internal static string ViewExplorerCommandText {
+        public static string ViewExplorerCommandText {
             get {
                 return ResourceManager.GetString("ViewExplorerCommandText", resourceCulture);
             }
@@ -117,7 +117,7 @@ namespace Gemini.Modules.Explorer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to View folder explorer.
         /// </summary>
-        internal static string ViewExplorerCommandToolTip {
+        public static string ViewExplorerCommandToolTip {
             get {
                 return ResourceManager.GetString("ViewExplorerCommandToolTip", resourceCulture);
             }

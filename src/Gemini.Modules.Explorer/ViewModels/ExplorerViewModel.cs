@@ -19,7 +19,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         private RelayCommand _openFolderViewCommand;
         public ICommand OpenFolderViewCommand
         {
-            get { return _openFolderViewCommand == null ? _openFolderViewCommand = new RelayCommand(a => OpenFolder()) : _openFolderViewCommand; }
+            get { return _openFolderViewCommand ?? (_openFolderViewCommand = new RelayCommand(o => OpenFolder())); }
         }
 
         private readonly IShell _shell;

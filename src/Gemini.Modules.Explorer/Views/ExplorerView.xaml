@@ -6,6 +6,7 @@
              xmlns:dd="clr-namespace:Gemini.Modules.Explorer.Design"
              xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
              xmlns:model="clr-namespace:Gemini.Modules.Explorer.Models"
+             xmlns:properties="clr-namespace:Gemini.Modules.Explorer.Properties"
              xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
@@ -13,58 +14,60 @@
     <UserControl.Resources>
         <converters:NullableValueConverter x:Key="NullableValueConverter" />
     </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="Auto" />
-        </Grid.RowDefinitions>
-        <Button x:Name="OpenFolder" Content="Open folder" Command="{Binding OpenFolderViewCommand}">
-            <Button.Style>
-                <Style TargetType="{x:Type Button}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsFolderOpened}" Value="True">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Button.Style>
-        </Button>
-        <StackPanel>
-            <StackPanel.Style>
-                <Style TargetType="{x:Type StackPanel}">
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsFolderOpened}" Value="False">
-                            <Setter Property="Visibility" Value="Collapsed" />
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </StackPanel.Style>
-            <DockPanel>
-                <Image Source="{Binding FolderTree.IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
-                <TextBlock Text="{Binding FolderTree.Name}" />
-            </DockPanel>
-            <tvx:TreeViewEx Grid.Row="2" ItemsSource="{Binding FolderTree.Children}" >
-                <tvx:TreeViewEx.Style>
-                    <Style TargetType="{x:Type tvx:TreeViewEx}">
-                        <Setter Property="Background" Value="Transparent" />
-                        <Setter Property="BorderThickness" Value="0" />
+    <ScrollViewer HorizontalScrollBarVisibility="Auto">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Button Content="{x:Static properties:Resources.OpenFolderCommandText}" Command="{Binding OpenFolderViewCommand}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFolderOpened}" Value="True">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
-                </tvx:TreeViewEx.Style>
-                <tvx:TreeViewEx.ItemContainerStyle>
-                    <Style TargetType="{x:Type tvx:TreeViewExItem}">
-                        <EventSetter Event="MouseDoubleClick" Handler="OnItemMouseDoubleClick" />
-                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                </Button.Style>
+            </Button>
+            <StackPanel>
+                <StackPanel.Style>
+                    <Style TargetType="{x:Type StackPanel}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsFolderOpened}" Value="False">
+                                <Setter Property="Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
                     </Style>
-                </tvx:TreeViewEx.ItemContainerStyle>
-                <tvx:TreeViewEx.ItemTemplate>
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type model:TreeItem}">
-                        <DockPanel>
-                            <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
-                            <TextBlock Text="{Binding Path=Name}" />
-                        </DockPanel>
-                    </HierarchicalDataTemplate>
-                </tvx:TreeViewEx.ItemTemplate>
-            </tvx:TreeViewEx>
-        </StackPanel>
-    </Grid>
+                </StackPanel.Style>
+                <DockPanel>
+                    <Image Source="{Binding FolderTree.IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
+                    <TextBlock Text="{Binding FolderTree.Name}" />
+                </DockPanel>
+                <tvx:TreeViewEx Grid.Row="2" ItemsSource="{Binding FolderTree.Children}">
+                    <tvx:TreeViewEx.Style>
+                        <Style TargetType="{x:Type tvx:TreeViewEx}">
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                    </tvx:TreeViewEx.Style>
+                    <tvx:TreeViewEx.ItemContainerStyle>
+                        <Style TargetType="{x:Type tvx:TreeViewExItem}">
+                            <EventSetter Event="MouseDoubleClick" Handler="OnItemMouseDoubleClick" />
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        </Style>
+                    </tvx:TreeViewEx.ItemContainerStyle>
+                    <tvx:TreeViewEx.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type model:TreeItem}">
+                            <DockPanel>
+                                <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
+                                <TextBlock Text="{Binding Path=Name}" />
+                            </DockPanel>
+                        </HierarchicalDataTemplate>
+                    </tvx:TreeViewEx.ItemTemplate>
+                </tvx:TreeViewEx>
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
 </UserControl>
