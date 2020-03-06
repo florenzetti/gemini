@@ -16,6 +16,6 @@ namespace Gemini.Modules.Explorer
 
         [Export]
         public static MenuItemDefinition CloseFolderMenuItem = new CommandMenuItemDefinition<FileCloseFolderCommandDefinition>(
-            MainMenu.MenuDefinitions.FileNewOpenMenuGroup, 5);
+            MainMenu.MenuDefinitions.FileCloseMenuGroup, 2);
     }
 }

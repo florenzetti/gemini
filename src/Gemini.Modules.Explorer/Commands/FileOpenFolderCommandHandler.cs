@@ -18,7 +18,7 @@ namespace Gemini.Modules.Explorer.Commands
 
         public override Task Run(Command command)
         {
-            _explorer.OpenFolder();
+            _explorer.OpenSource();
             return TaskUtility.Completed;
         }
     }

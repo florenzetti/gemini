@@ -1,0 +1,20 @@
+using Gemini.Modules.Explorer.Models;
+using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Gemini.Modules.Explorer.Services
+{
+    public interface IExplorerProvider
+    {
+        event ExplorerItemChangedEventHandler ItemCreated;
+        event ExplorerItemRenamedEventHandler ItemRenamed;
+        event ExplorerItemChangedEventHandler ItemDeleted;
+
+        bool IsOpened { get; }
+        string SourceName { get; }
+
+        ITreeItem Open();
+        void Close();
+    }
+}

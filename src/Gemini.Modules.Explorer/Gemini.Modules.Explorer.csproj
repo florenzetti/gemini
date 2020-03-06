@@ -9,6 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Resources\Icons\file.png" />
     <None Remove="Resources\Icons\folder.png" />
     <None Remove="Resources\Icons\folder_open.png" />
   </ItemGroup>
@@ -43,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Resources\Icons\file.png" />
     <Resource Include="Resources\Icons\folder.png" />
     <Resource Include="Resources\Icons\folder_open.png" />
   </ItemGroup>

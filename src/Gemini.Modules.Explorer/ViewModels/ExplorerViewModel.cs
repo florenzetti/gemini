@@ -2,12 +2,11 @@ using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Services;
 using Gemini.Modules.Explorer.Models;
+using Gemini.Modules.Explorer.Services;
 using System.ComponentModel.Composition;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Input;
 
 namespace Gemini.Modules.Explorer.ViewModels
@@ -15,55 +14,76 @@ namespace Gemini.Modules.Explorer.ViewModels
     [Export(typeof(IExplorerTool))]
     public class ExplorerViewModel : Tool, IExplorerTool
     {
-        private DirectoryInfo _directoryInfo;
-        private RelayCommand _openFolderViewCommand;
-        public ICommand OpenFolderViewCommand
+        public string FullPath => _explorerProvider.SourceName;
+
+        private RelayCommand _openSourceCommand;
+        public ICommand OpenOpenSourceCommand
         {
-            get { return _openFolderViewCommand ?? (_openFolderViewCommand = new RelayCommand(o => OpenFolder())); }
+            get { return _openSourceCommand ?? (_openSourceCommand = new RelayCommand(o => OpenSource())); }
         }
 
         private readonly IShell _shell;
+        private readonly IExplorerProvider _explorerProvider;
         private readonly IEditorProvider _editorProvider;
-        public bool IsFolderOpened => _directoryInfo != null;
+        public bool IsSourceOpened => _explorerProvider.IsOpened;
 
         public override PaneLocation PreferredLocation
         {
             get { return PaneLocation.Left; }
         }
 
-        public TreeItem FolderTree { get; private set; }
+        public ITreeItem SourceTree { get; private set; }
 
         [ImportingConstructor]
-        public ExplorerViewModel(IShell shell, IEditorProvider editorProvider)
+        public ExplorerViewModel(IShell shell, IExplorerProvider explorerProvider, IEditorProvider editorProvider)
         {
             _shell = shell;
+            _explorerProvider = explorerProvider;
+            _explorerProvider.ItemCreated += OnExplorerProviderItemCreated;
+            _explorerProvider.ItemDeleted += OnExplorerProviderItemDeleted;
+            _explorerProvider.ItemRenamed += OnExplorerProviderItemRenamed;
             _editorProvider = editorProvider;
             DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
         }
 
-        public void OpenFolder()
+        private void OnExplorerProviderItemRenamed(object sender, ExplorerItemRenamedEventArgs e)
         {
-            var folderDialog = new FolderBrowserDialog();
-            if (folderDialog.ShowDialog() == DialogResult.OK)
+            var treeItem = SourceTree.FindChildRecursive(e.OldFullPath);
+            if (treeItem != null)
             {
-                _directoryInfo = new DirectoryInfo(folderDialog.SelectedPath);
-                FolderTree = TreeItem.LoadRecursive(_directoryInfo);
-                NotifyOfPropertyChange(() => FolderTree);
-                NotifyOfPropertyChange(() => IsFolderOpened);
+                treeItem.Name = e.Name;
+                treeItem.FullPath = e.FullPath;
             }
         }
 
-        public void CloseFolder()
+        private void OnExplorerProviderItemDeleted(object sender, ExplorerItemChangedEventArgs e)
         {
-            _directoryInfo = null;
-            FolderTree = null;
-            NotifyOfPropertyChange(() => FolderTree);
-            NotifyOfPropertyChange(() => IsFolderOpened);
+            SourceTree.RemoveChild(e.FullPath);
         }
 
-        public async Task OpenItemAsync(TreeItem item)
+        private void OnExplorerProviderItemCreated(object sender, ExplorerItemChangedEventArgs e)
         {
-            if (item.IsFolder)
+            SourceTree.AddChild(e.FullPath);
+        }
+
+        public void OpenSource()
+        {
+            SourceTree = _explorerProvider.Open();
+            NotifyOfPropertyChange(() => SourceTree);
+            NotifyOfPropertyChange(() => IsSourceOpened);
+        }
+
+        public void CloseSource()
+        {
+            SourceTree = null;
+            _explorerProvider.Close();
+            NotifyOfPropertyChange(() => SourceTree);
+            NotifyOfPropertyChange(() => IsSourceOpened);
+        }
+
+        public async Task OpenItemAsync(ITreeItem item)
+        {
+            if (item.CanOpenDocument)
                 return;
 
             var editor = _shell.Documents.FirstOrDefault(o => o.Id == item.DocumentId);

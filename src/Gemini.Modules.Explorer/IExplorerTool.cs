@@ -4,8 +4,9 @@ namespace Gemini.Modules.Explorer
 {
     public interface IExplorerTool : ITool
     {
-        bool IsFolderOpened { get; }
-        void OpenFolder();
-        void CloseFolder();
+        string FullPath { get; }
+        bool IsSourceOpened { get; }
+        void OpenSource();
+        void CloseSource();
     }
 }

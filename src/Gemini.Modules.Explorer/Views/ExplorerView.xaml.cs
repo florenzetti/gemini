@@ -17,7 +17,7 @@ namespace Gemini.Modules.Explorer.Views
 
         private void OnItemMouseDoubleClick(object sender, MouseButtonEventArgs args)
         {
-            var item = ((TreeViewExItem)sender).DataContext as TreeItem;
+            var item = ((TreeViewExItem)sender).DataContext as ITreeItem;
             ((ExplorerViewModel)DataContext).OpenItemAsync(item);
         }
     }

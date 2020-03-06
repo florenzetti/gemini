@@ -18,7 +18,7 @@ namespace Gemini.Modules.Explorer.Commands
 
         public override void Update(Command command)
         {
-            if (!_explorer.IsFolderOpened)
+            if (!_explorer.IsSourceOpened)
                 command.Enabled = false;
             else
                 command.Enabled = true;
@@ -27,7 +27,7 @@ namespace Gemini.Modules.Explorer.Commands
 
         public override Task Run(Command command)
         {
-            _explorer.CloseFolder();
+            _explorer.CloseSource();
             return TaskUtility.Completed;
         }
     }

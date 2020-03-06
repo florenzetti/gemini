@@ -20,11 +20,11 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Button Content="{x:Static properties:Resources.OpenFolderCommandText}" Command="{Binding OpenFolderViewCommand}">
+            <Button Content="{x:Static properties:Resources.OpenFolderCommandText}" Command="{Binding OpenOpenSourceCommand}">
                 <Button.Style>
                     <Style TargetType="{x:Type Button}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsFolderOpened}" Value="True">
+                            <DataTrigger Binding="{Binding IsSourceOpened}" Value="True">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -35,17 +35,17 @@
                 <StackPanel.Style>
                     <Style TargetType="{x:Type StackPanel}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsFolderOpened}" Value="False">
+                            <DataTrigger Binding="{Binding IsSourceOpened}" Value="False">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </StackPanel.Style>
                 <DockPanel>
-                    <Image Source="{Binding FolderTree.IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
-                    <TextBlock Text="{Binding FolderTree.Name}" />
+                    <Image Source="{Binding SourceTree.IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
+                    <TextBlock Text="{Binding SourceTree.Name}" />
                 </DockPanel>
-                <tvx:TreeViewEx Grid.Row="2" ItemsSource="{Binding FolderTree.Children}">
+                <tvx:TreeViewEx Grid.Row="2" ItemsSource="{Binding SourceTree.Children}">
                     <tvx:TreeViewEx.Style>
                         <Style TargetType="{x:Type tvx:TreeViewEx}">
                             <Setter Property="Background" Value="Transparent" />
@@ -59,7 +59,7 @@
                         </Style>
                     </tvx:TreeViewEx.ItemContainerStyle>
                     <tvx:TreeViewEx.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type model:TreeItem}">
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type model:ITreeItem}">
                             <DockPanel>
                                 <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
                                 <TextBlock Text="{Binding Path=Name}" />
