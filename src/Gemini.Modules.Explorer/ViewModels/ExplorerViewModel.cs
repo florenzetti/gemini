@@ -2,6 +2,7 @@ using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Commands;
 using Gemini.Framework.Services;
+using Gemini.Modules.Explorer.Menus;
 //using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Services;
@@ -31,7 +32,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         private readonly IEditorProvider _editorProvider;
         //private readonly ICommandRouter _commandRouter;
         private readonly ICommandService _commandService;
-        private readonly MenuModel _menuModel;
+        private readonly ContextMenuModel _menuModel;
         public bool IsSourceOpened => _explorerProvider.IsOpened;
 
         public override PaneLocation PreferredLocation
@@ -41,7 +42,7 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public TreeItem SourceTree { get; private set; }
 
-        public MenuModel ContextMenuModel => _menuModel;
+        public ContextMenuModel ContextMenuModel => _menuModel;
 
         [ImportingConstructor]
         public ExplorerViewModel(IShell shell,
@@ -49,7 +50,7 @@ namespace Gemini.Modules.Explorer.ViewModels
             IEditorProvider editorProvider,
             ICommandService commandService,
             //,ICommandRouter commandRouter
-            ExplorerContextMenuViewModel menuModel
+            ContextMenuBuilder menuBuilder
             )
         {
             _shell = shell;
@@ -60,7 +61,8 @@ namespace Gemini.Modules.Explorer.ViewModels
             _editorProvider = editorProvider;
             _commandService = commandService;
             //_commandRouter = commandRouter;
-            _menuModel = menuModel.BuildMenu();
+            _menuModel = new ContextMenuModel();
+            menuBuilder.BuildMenu(MenuDefinitions.ContextMenuDefinition, _menuModel);
 
             DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
         }

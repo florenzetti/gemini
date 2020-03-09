@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:Gemini.Modules.Explorer.Design"
              xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
+             xmlns:controls="clr-namespace:Gemini.Modules.MainMenu.Controls;assembly=Gemini"
              xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
              xmlns:model="clr-namespace:Gemini.Modules.Explorer.Models"
              xmlns:properties="clr-namespace:Gemini.Modules.Explorer.Properties"
@@ -13,8 +14,8 @@
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance dd:DesignTimeExplorerViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
-        <!--<ResourceDictionary Source="../Resources/Styles.xaml" />-->
-        <converters:NullableValueConverter x:Key="NullableValueConverter" />
+        <ResourceDictionary Source="../Resources/Styles.xaml" />
+        <!--<converters:NullableValueConverter x:Key="NullableValueConverter" />-->
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
         <Grid>
@@ -57,27 +58,13 @@
                     <tvx:TreeViewEx.ItemContainerStyle>
                         <Style TargetType="{x:Type tvx:TreeViewExItem}">
                             <EventSetter Event="MouseDoubleClick" Handler="OnItemMouseDoubleClick" />
+                            <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type views:ExplorerView}}}" />
                             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
                             <Setter Property="ContextMenu">
                                 <Setter.Value>
-                                    <ContextMenu ItemsSource="{Binding ContextMenuModel}">
-                                        <!--ItemTemplate="{StaticResource menuTemplate}">-->
-                                        <ContextMenu.ItemTemplate>
-                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                                <ContentPresenter Content="{Binding Path=Text}" RecognizesAccessKey="True" />
-                                            </HierarchicalDataTemplate>
-                                        </ContextMenu.ItemTemplate>
-                                        <!--<ContextMenu.ItemContainerStyle>
-                                            <Style TargetType="MenuItem">
-                                                <Setter Property="Command" Value="{Binding Command}" />
-                                            </Style>
-                                        </ContextMenu.ItemContainerStyle>-->
-                                        <!--<ContextMenu.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Text}" />
-                                            </DataTemplate>
-                                        </ContextMenu.ItemTemplate>-->
-                                    </ContextMenu>
+                                    <controls:ContextMenuEx DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                            ItemsSource="{Binding ContextMenuModel}"
+                                                            ItemTemplate="{StaticResource menuTemplate}" />
                                 </Setter.Value>
                             </Setter>
                         </Style>

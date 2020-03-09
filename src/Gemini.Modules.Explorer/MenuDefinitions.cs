@@ -1,5 +1,6 @@
 using Gemini.Framework.Menus;
 using Gemini.Modules.Explorer.Commands;
+using Gemini.Modules.Explorer.Menus;
 //using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using System.ComponentModel.Composition;
@@ -8,17 +9,20 @@ namespace Gemini.Modules.Explorer
 {
     public static class MenuDefinitions
     {
-        [Export]
-        public static MenuBarDefinition MenuContextBar = new MenuBarDefinition();
+        //[Export]
+        //public static MenuBarDefinition MenuContextBar = new MenuBarDefinition();
+
+        //[Export]
+        //public static MenuDefinition ContextMenuDefinition = new MenuDefinition(MenuContextBar, 1, "Context menu");
 
         [Export]
-        public static MenuDefinition ContextMenuDefinition = new MenuDefinition(MenuContextBar, 1, "Context menu");
+        public static ContextMenuDefinition ContextMenuDefinition = new ContextMenuDefinition();
 
         [Export]
-        public static MenuItemGroupDefinition EditMenuGroupItemDefinition = new MenuItemGroupDefinition(ContextMenuDefinition, 1);
+        public static ContextMenuItemGroupDefinition EditMenuGroupItemDefinition = new ContextMenuItemGroupDefinition(ContextMenuDefinition, 1);
 
         [Export]
-        public static MenuItemDefinition renameMenuItem = new CommandMenuItemDefinition<RenameCommandDefinition>(
+        public static ContextMenuItemDefinition renameMenuItem = new ContextCommandMenuItemDefinition<RenameCommandDefinition>(
             EditMenuGroupItemDefinition, 1);
 
         [Export]
