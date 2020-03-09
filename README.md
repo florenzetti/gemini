@@ -322,24 +322,25 @@ To find out how to bind commands to menus or toolbars, see the "MainMenu" and "T
 
 Gemini itself is built out of seven core modules:
 
-* MainWindow
-* Shell
-* MainMenu
-* StatusBar
-* ToolBars
-* Toolbox
-* UndoRedo
+* [MainWindow](###mainwindow-module)
+* [Shell](###shell-module)
+* [MainMenu](###mainmenu-module)
+* [StatusBar](###statusbar-module)
+* [ToolBars](###toolbars-module)
+* [Toolbox](###toolbox-module)
+* [UndoRedo](###undoredo-module)
 
 Several more modules ship with Gemini, and are available as 
 [NuGet packages](http://nuget.org/packages?q=Gemini.Modules) as described above:
 
-* CodeCompiler
-* CodeEditor
-* ErrorList
-* GraphEditor
-* Inspector
-* Output
-* PropertyGrid
+* [CodeCompiler](###codecompiler-module)
+* [CodeEditor](###codeeditor-module)
+* [ErrorList](###errorlist-module)
+* [GraphEditor](###grapheditor-module)
+* [Inspector](###inspector-module)
+* [Output](###output-module)
+* [PropertyGrid](###propertygrid-module)
+* [Explorer](###explorer-module)
 
 For more information about these modules, see below. In general, each module adds some combination
 of menu items, tool window, document types and services.
@@ -937,6 +938,31 @@ Extended WPF Toolkit.
 ```csharp
 var propertyGrid = IoC.Get<IPropertyGrid>();
 propertyGrid.SelectedObject = myObject;
+```
+
+### Explorer module
+
+Implements a explorer with hierarchical tree view using TreeViewEx package to manage a source target and its elements as documents (see [Documents section](###documents)).
+A built-in FileSytemExplorerProvider to file system source is included.
+
+#### Provides
+
+* `IExplorerTool` tool window
+* `ITreeItem` interface for tree items definition
+* `IExplorerProvider` service interface for others eplorer sources
+* `FileSystemExplorerProvider` for filesystem source
+
+#### NuGet package
+
+* [Gemini.Modules.Explorer](http://nuget.org/packages/Gemini.Modules.Explorer/)
+
+#### Dependencies
+
+* [TreeViewEx](https://github.com/dotnetprojects/TreeViewEx)
+
+#### Usage
+
+```csharp
 ```
 
 ## Sample application

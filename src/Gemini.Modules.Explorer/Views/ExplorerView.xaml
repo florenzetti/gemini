@@ -4,14 +4,16 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:Gemini.Modules.Explorer.Design"
+             xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
              xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
              xmlns:model="clr-namespace:Gemini.Modules.Explorer.Models"
              xmlns:properties="clr-namespace:Gemini.Modules.Explorer.Properties"
-             xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
+             xmlns:views="clr-namespace:Gemini.Modules.Explorer.Views"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance dd:DesignTimeExplorerViewModel, IsDesignTimeCreatable=True}">
     <UserControl.Resources>
+        <!--<ResourceDictionary Source="../Resources/Styles.xaml" />-->
         <converters:NullableValueConverter x:Key="NullableValueConverter" />
     </UserControl.Resources>
     <ScrollViewer HorizontalScrollBarVisibility="Auto">
@@ -56,10 +58,33 @@
                         <Style TargetType="{x:Type tvx:TreeViewExItem}">
                             <EventSetter Event="MouseDoubleClick" Handler="OnItemMouseDoubleClick" />
                             <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="ContextMenu">
+                                <Setter.Value>
+                                    <ContextMenu ItemsSource="{Binding ContextMenuModel}">
+                                        <!--ItemTemplate="{StaticResource menuTemplate}">-->
+                                        <ContextMenu.ItemTemplate>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                                <ContentPresenter Content="{Binding Path=Text}" RecognizesAccessKey="True" />
+                                            </HierarchicalDataTemplate>
+                                        </ContextMenu.ItemTemplate>
+                                        <!--<ContextMenu.ItemContainerStyle>
+                                            <Style TargetType="MenuItem">
+                                                <Setter Property="Command" Value="{Binding Command}" />
+                                            </Style>
+                                        </ContextMenu.ItemContainerStyle>-->
+                                        <!--<ContextMenu.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Text}" />
+                                            </DataTemplate>
+                                        </ContextMenu.ItemTemplate>-->
+                                    </ContextMenu>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </tvx:TreeViewEx.ItemContainerStyle>
                     <tvx:TreeViewEx.ItemTemplate>
-                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type model:ITreeItem}">
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}"
+                                                  DataType="{x:Type model:TreeItem}">
                             <DockPanel>
                                 <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
                                 <TextBlock Text="{Binding Path=Name}" />

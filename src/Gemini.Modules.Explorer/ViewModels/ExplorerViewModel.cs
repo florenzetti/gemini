@@ -1,8 +1,12 @@
 using Caliburn.Micro;
 using Gemini.Framework;
+using Gemini.Framework.Commands;
 using Gemini.Framework.Services;
+//using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Services;
+using Gemini.Modules.MainMenu;
+using Gemini.Modules.MainMenu.Models;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +29,9 @@ namespace Gemini.Modules.Explorer.ViewModels
         private readonly IShell _shell;
         private readonly IExplorerProvider _explorerProvider;
         private readonly IEditorProvider _editorProvider;
+        //private readonly ICommandRouter _commandRouter;
+        private readonly ICommandService _commandService;
+        private readonly MenuModel _menuModel;
         public bool IsSourceOpened => _explorerProvider.IsOpened;
 
         public override PaneLocation PreferredLocation
@@ -32,10 +39,18 @@ namespace Gemini.Modules.Explorer.ViewModels
             get { return PaneLocation.Left; }
         }
 
-        public ITreeItem SourceTree { get; private set; }
+        public TreeItem SourceTree { get; private set; }
+
+        public MenuModel ContextMenuModel => _menuModel;
 
         [ImportingConstructor]
-        public ExplorerViewModel(IShell shell, IExplorerProvider explorerProvider, IEditorProvider editorProvider)
+        public ExplorerViewModel(IShell shell,
+            IExplorerProvider explorerProvider,
+            IEditorProvider editorProvider,
+            ICommandService commandService,
+            //,ICommandRouter commandRouter
+            ExplorerContextMenuViewModel menuModel
+            )
         {
             _shell = shell;
             _explorerProvider = explorerProvider;
@@ -43,6 +58,10 @@ namespace Gemini.Modules.Explorer.ViewModels
             _explorerProvider.ItemDeleted += OnExplorerProviderItemDeleted;
             _explorerProvider.ItemRenamed += OnExplorerProviderItemRenamed;
             _editorProvider = editorProvider;
+            _commandService = commandService;
+            //_commandRouter = commandRouter;
+            _menuModel = menuModel.BuildMenu();
+
             DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
         }
 
@@ -81,9 +100,9 @@ namespace Gemini.Modules.Explorer.ViewModels
             NotifyOfPropertyChange(() => IsSourceOpened);
         }
 
-        public async Task OpenItemAsync(ITreeItem item)
+        public async Task OpenItemAsync(TreeItem item)
         {
-            if (item.CanOpenDocument)
+            if (!item.CanOpenDocument)
                 return;
 
             var editor = _shell.Documents.FirstOrDefault(o => o.Id == item.DocumentId);

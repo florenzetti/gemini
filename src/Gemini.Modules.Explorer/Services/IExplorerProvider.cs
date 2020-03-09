@@ -14,7 +14,7 @@ namespace Gemini.Modules.Explorer.Services
         bool IsOpened { get; }
         string SourceName { get; }
 
-        ITreeItem Open();
+        TreeItem Open();
         void Close();
     }
 }

@@ -39,7 +39,7 @@ namespace Gemini.Modules.Explorer.Services
             remove { _itemDeleted -= value; }
         }
 
-        public ITreeItem Open()
+        public TreeItem Open()
         {
             FileSystemTreeItem result = null;
             var folderDialog = new FolderBrowserDialog();

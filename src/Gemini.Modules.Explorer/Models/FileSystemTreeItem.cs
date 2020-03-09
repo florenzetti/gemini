@@ -1,4 +1,7 @@
 using Caliburn.Micro;
+using Gemini.Framework.Commands;
+using Gemini.Modules.Explorer.Commands;
+using Gemini.Modules.MainMenu.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,11 +9,11 @@ using System.Linq;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public class FileSystemTreeItem : PropertyChangedBase, ITreeItem
+    public class FileSystemTreeItem : TreeItem
     {
-        public Guid DocumentId { get; set; }
+        //public Guid DocumentId { get; set; }
         private string _name;
-        public string Name
+        public override string Name
         {
             get => _name;
             set
@@ -21,7 +24,7 @@ namespace Gemini.Modules.Explorer.Models
         }
 
         private string _fullPath;
-        public string FullPath
+        public override string FullPath
         {
             get => _fullPath;
             set
@@ -30,8 +33,8 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => FullPath);
             }
         }
-        public Uri IconSource => GetIconSource();
-        public bool CanOpenDocument => !IsFolder;
+        public override Uri IconSource => GetIconSource();
+        public override bool CanOpenDocument => !IsFolder;
         private bool _isExpanded;
         public bool IsExpanded
         {
@@ -43,22 +46,30 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => IconSource);
             }
         }
-        private readonly BindableCollection<ITreeItem> _children;
-        public IList<ITreeItem> Children => _children;
+        private readonly BindableCollection<TreeItem> _children;
+        public override IList<TreeItem> Children => _children;
+
+        //public override IEnumerable<CommandMenuItem> Commands
+        //{
+        //    get
+        //    {
+        //        yield return new CommandMenuItem();
+        //    }
+        //}
 
         public bool IsFolder { get; private set; }
 
         public FileSystemTreeItem()
         {
-            _children = new BindableCollection<ITreeItem>();
+            _children = new BindableCollection<TreeItem>();
         }
 
-        public ITreeItem FindChildRecursive(string fullPath)
+        public override TreeItem FindChildRecursive(string fullPath)
         {
             return FindChildRecursive(fullPath, this);
         }
 
-        public ITreeItem AddChild(string fullPath)
+        public override TreeItem AddChild(string fullPath)
         {
             var parentPath = Path.GetDirectoryName(fullPath);
             var parentTreeItem = FindChildRecursive(parentPath);
@@ -77,7 +88,7 @@ namespace Gemini.Modules.Explorer.Models
             return result;
         }
 
-        public void RemoveChild(string fullPath)
+        public override void RemoveChild(string fullPath)
         {
             var parentFolderName = Path.GetDirectoryName(fullPath);
             var parentTreeItem = FindChildRecursive(parentFolderName);
@@ -106,9 +117,9 @@ namespace Gemini.Modules.Explorer.Models
             return result;
         }
 
-        protected static ITreeItem FindChildRecursive(string fullPath, ITreeItem root)
+        protected static TreeItem FindChildRecursive(string fullPath, TreeItem root)
         {
-            ITreeItem result = null;
+            TreeItem result = null;
             if (root.FullPath == fullPath)
                 result = root;
             else
