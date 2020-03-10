@@ -13,7 +13,7 @@ namespace Gemini.Modules.Explorer.Services
 
         bool IsOpened { get; }
         string SourceName { get; }
-
+        TreeItem SourceTree { get; }
         TreeItem Open();
         void Close();
     }

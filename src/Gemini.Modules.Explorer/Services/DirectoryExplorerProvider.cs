@@ -14,8 +14,9 @@ namespace Gemini.Modules.Explorer.Services
         private FileSystemWatcher _fsWatcher;
 
         private DirectoryInfo _directoryInfo;
-        public bool IsOpened => _directoryInfo != null;
+        public bool IsOpened => SourceTree != null;
         public string SourceName => _directoryInfo?.Name;
+        public TreeItem SourceTree { get; private set; }
 
         private event ExplorerItemChangedEventHandler _itemCreated;
         private event ExplorerItemRenamedEventHandler _itemRenamed;
@@ -41,15 +42,14 @@ namespace Gemini.Modules.Explorer.Services
 
         public TreeItem Open()
         {
-            FileSystemTreeItem result = null;
             var folderDialog = new FolderBrowserDialog();
             if (folderDialog.ShowDialog() == DialogResult.OK)
             {
                 _directoryInfo = new DirectoryInfo(folderDialog.SelectedPath);
                 CreateFileSystemWacther(folderDialog.SelectedPath);
-                result = FileSystemTreeItem.LoadRecursive(_directoryInfo);
+                SourceTree = FileSystemTreeItem.LoadRecursive(_directoryInfo);
             }
-            return result;
+            return SourceTree;
         }
 
         public void Dispose()

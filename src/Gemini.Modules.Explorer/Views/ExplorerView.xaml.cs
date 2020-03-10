@@ -20,5 +20,12 @@ namespace Gemini.Modules.Explorer.Views
             var item = ((TreeViewExItem)sender).DataContext as TreeItem;
             ((ExplorerViewModel)DataContext).OpenItemAsync(item);
         }
+
+        private void OnScrollViewerMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var scrollViewer = (ScrollViewer)sender;
+            scrollViewer.ScrollToVerticalOffset(scrollViewer.VerticalOffset - e.Delta);
+            e.Handled = true;
+        }
     }
 }

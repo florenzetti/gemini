@@ -40,7 +40,7 @@ namespace Gemini.Modules.Explorer.ViewModels
             get { return PaneLocation.Left; }
         }
 
-        public TreeItem SourceTree { get; private set; }
+        public TreeItem SourceTree => _explorerProvider.SourceTree;
 
         public ContextMenuModel ContextMenuModel => _menuModel;
 
@@ -89,14 +89,13 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public void OpenSource()
         {
-            SourceTree = _explorerProvider.Open();
+            _explorerProvider.Open();
             NotifyOfPropertyChange(() => SourceTree);
             NotifyOfPropertyChange(() => IsSourceOpened);
         }
 
         public void CloseSource()
         {
-            SourceTree = null;
             _explorerProvider.Close();
             NotifyOfPropertyChange(() => SourceTree);
             NotifyOfPropertyChange(() => IsSourceOpened);

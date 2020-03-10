@@ -1,8 +1,6 @@
 <ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:controls="clr-namespace:Gemini.Modules.MainMenu.Controls;assembly=Gemini"
-                    xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
-                    xmlns:b="clr-namespace:Gemini.Modules.MainMenu.Behaviors;assembly=Gemini">
+                    xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini">
 
     <converters:NullableValueConverter x:Key="NullableValueConverter" />
     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
@@ -11,5 +9,5 @@
 
     <HierarchicalDataTemplate x:Key="menuTemplate" ItemsSource="{Binding Children}">
         <ContentPresenter Content="{Binding Path=Text}" RecognizesAccessKey="True" />
-	</HierarchicalDataTemplate>
+    </HierarchicalDataTemplate>
 </ResourceDictionary>
