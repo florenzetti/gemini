@@ -67,6 +67,14 @@
                                                             ItemTemplate="{StaticResource menuTemplate}" />
                                 </Setter.Value>
                             </Setter>
+                            <Setter Property="IsEditable" Value="True" />
+                            <Setter Property="TemplateEdit">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Text}"/>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
                         </Style>
                     </tvx:TreeViewEx.ItemContainerStyle>
                     <tvx:TreeViewEx.ItemTemplate>

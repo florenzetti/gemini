@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public abstract class TreeItem : PropertyChangedBase//, ITreeItem
+    public abstract class TreeItem : PropertyChangedBase
     {
         public Guid DocumentId { get; set; }
         public abstract string Name { get; set; }
@@ -16,7 +16,6 @@ namespace Gemini.Modules.Explorer.Models
         public abstract Uri IconSource { get; }
         public abstract bool CanOpenDocument { get; }
         public abstract IList<TreeItem> Children { get; }
-        //public abstract IEnumerable<CommandDefinition> Commands { get; }
         public abstract TreeItem FindChildRecursive(string fullPath);
         public abstract TreeItem AddChild(string fullPath);
         public abstract void RemoveChild(string fullPath);
