@@ -4,10 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:Gemini.Modules.Explorer.Design"
-             xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
              xmlns:controls="clr-namespace:Gemini.Modules.MainMenu.Controls;assembly=Gemini"
-             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
-             xmlns:geminibehaviors="clr-namespace:Gemini.Framework.Behaviors;assembly=Gemini"
              xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
              xmlns:model="clr-namespace:Gemini.Modules.Explorer.Models"
              xmlns:properties="clr-namespace:Gemini.Modules.Explorer.Properties"
@@ -19,13 +16,7 @@
         <ResourceDictionary Source="../Resources/Styles.xaml" />
         <!--<converters:NullableValueConverter x:Key="NullableValueConverter" />-->
     </UserControl.Resources>
-    <ScrollViewer x:Name="MainScrollViewer" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                  Focusable="False" PreviewMouseWheel="OnScrollViewerMouseWheel">
-    <StackPanel>
-        <!--<Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition Height="Auto" />
-            </Grid.RowDefinitions>-->
+    <Grid>
         <Button Content="{x:Static properties:Resources.OpenFolderCommandText}" Command="{Binding OpenOpenSourceCommand}" VerticalAlignment="Top">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
@@ -37,21 +28,25 @@
                 </Style>
             </Button.Style>
         </Button>
-        <StackPanel>
-            <StackPanel.Style>
-                <Style TargetType="{x:Type StackPanel}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsSourceOpened}" Value="False">
                             <Setter Property="Visibility" Value="Collapsed" />
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </StackPanel.Style>
-            <DockPanel>
+            </Grid.Style>
+            <DockPanel Grid.Row="0">
                 <Image Source="{Binding SourceTree.IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
                 <TextBlock Text="{Binding SourceTree.Name}" />
             </DockPanel>
-            <tvx:TreeViewEx ItemsSource="{Binding SourceTree.Children}">
+            <tvx:TreeViewEx Grid.Row="1" ItemsSource="{Binding SourceTree.Children}">
                 <tvx:TreeViewEx.Style>
                     <Style TargetType="{x:Type tvx:TreeViewEx}">
                         <Setter Property="Background" Value="Transparent" />
@@ -94,7 +89,6 @@
                     </HierarchicalDataTemplate>
                 </tvx:TreeViewEx.ItemTemplate>
             </tvx:TreeViewEx>
-        </StackPanel>
-    </StackPanel>
-    </ScrollViewer>
+        </Grid>
+    </Grid>
 </UserControl>
