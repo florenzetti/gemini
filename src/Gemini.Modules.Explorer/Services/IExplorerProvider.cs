@@ -11,6 +11,7 @@ namespace Gemini.Modules.Explorer.Services
         event ExplorerItemRenamedEventHandler ItemRenamed;
         event ExplorerItemChangedEventHandler ItemDeleted;
 
+        IEnumerable<Type> ItemTypes { get; }
         bool IsOpened { get; }
         string SourceName { get; }
         TreeItem SourceTree { get; }

@@ -15,7 +15,7 @@ namespace Gemini.Modules.Explorer.Menus
     {
         private readonly ICommandService _commandService;
         //private readonly MenuBarDefinition[] _menuBars;
-        //private readonly MenuDefinition[] _menus;
+        private readonly ContextMenuDefinition[] _menus;
         private readonly ContextMenuItemGroupDefinition[] _menuItemGroups;
         private readonly ContextMenuItemDefinition[] _menuItems;
         //private readonly MenuDefinition[] _excludeMenus;
@@ -26,7 +26,7 @@ namespace Gemini.Modules.Explorer.Menus
         public ContextMenuBuilder(
             ICommandService commandService,
             //[ImportMany] MenuBarDefinition[] menuBars,
-            //[ImportMany] MenuDefinition[] menus,
+            [ImportMany] ContextMenuDefinition[] menus,
             [ImportMany] ContextMenuItemGroupDefinition[] menuItemGroups,
             [ImportMany] ContextMenuItemDefinition[] menuItems)//,
                                                                //[ImportMany] ExcludeMenuDefinition[] excludeMenus,
@@ -35,7 +35,7 @@ namespace Gemini.Modules.Explorer.Menus
         {
             _commandService = commandService;
             //_menuBars = menuBars;
-            //_menus = menus;
+            _menus = menus;
             _menuItemGroups = menuItemGroups;
             _menuItems = menuItems;
             //_excludeMenus = excludeMenus.Select(x => x.MenuDefinitionToExclude).ToArray();
@@ -43,8 +43,9 @@ namespace Gemini.Modules.Explorer.Menus
             //_excludeMenuItems = excludeMenuItems.Select(x => x.MenuItemDefinitionToExclude).ToArray();
         }
 
-        public void BuildMenu(ContextMenuDefinition menu, ContextMenuModel result)
+        public void BuildMenu(Type itemType, ContextMenuModel result)
         {
+            var menu = _menus.FirstOrDefault(o => o.TargetItemType == itemType);
             var groups = _menuItemGroups
                 .Where(x => x.Parent == menu)
                 //.Where(x => !_excludeMenus.Contains(x))

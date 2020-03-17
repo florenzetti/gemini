@@ -13,13 +13,11 @@ namespace Gemini.Modules.Explorer.Services
     }
     public class ExplorerItemChangedEventArgs : EventArgs
     {
-        public string FullPath { get; }
-        public string Name { get; }
+        public TreeItem Item { get; }
         public ExplorerItemChangeType ChangeType { get; }
-        internal ExplorerItemChangedEventArgs(string fullPath, string name, ExplorerItemChangeType changeType)
+        internal ExplorerItemChangedEventArgs(TreeItem item, ExplorerItemChangeType changeType)
         {
-            FullPath = fullPath;
-            Name = name;
+            Item = item;
             ChangeType = changeType;
         }
     }

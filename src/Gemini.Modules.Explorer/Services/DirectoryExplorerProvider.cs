@@ -1,9 +1,12 @@
+using Gemini.Framework.Commands;
+using Gemini.Framework.Threading;
+using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gemini.Modules.Explorer.Services
@@ -12,15 +15,23 @@ namespace Gemini.Modules.Explorer.Services
     public class DirectoryExplorerProvider : IExplorerProvider, IDisposable
     {
         private FileSystemWatcher _fsWatcher;
-
         private DirectoryInfo _directoryInfo;
-        public bool IsOpened => SourceTree != null;
-        public string SourceName => _directoryInfo?.Name;
-        public TreeItem SourceTree { get; private set; }
 
         private event ExplorerItemChangedEventHandler _itemCreated;
         private event ExplorerItemRenamedEventHandler _itemRenamed;
         private event ExplorerItemChangedEventHandler _itemDeleted;
+
+        public IEnumerable<Type> ItemTypes
+        {
+            get
+            {
+                yield return typeof(FileSystemTreeItem);
+            }
+        }
+
+        public bool IsOpened => SourceTree != null;
+        public string SourceName => _directoryInfo?.Name;
+        public TreeItem SourceTree { get; private set; }
 
         event ExplorerItemChangedEventHandler IExplorerProvider.ItemCreated
         {
@@ -75,19 +86,39 @@ namespace Gemini.Modules.Explorer.Services
 
         private void OnFileSystemDeleted(object sender, FileSystemEventArgs e)
         {
-            var args = new ExplorerItemChangedEventArgs(e.FullPath, e.Name, ExplorerItemChangeType.Deleted);
+            var item = new FileSystemTreeItem()
+            {
+                FullPath = e.FullPath,
+                Name = e.Name
+            };
+            var args = new ExplorerItemChangedEventArgs(item, ExplorerItemChangeType.Deleted);
             _itemDeleted?.Invoke(this, args);
         }
 
         private void OnFileSystemRenamed(object sender, RenamedEventArgs e)
         {
-            var args = new ExplorerItemRenamedEventArgs(e.FullPath, e.Name, e.OldFullPath, e.OldName);
+            var item = new FileSystemTreeItem()
+            {
+                FullPath = e.FullPath,
+                Name = e.Name
+            };
+            var oldItem = new FileSystemTreeItem()
+            {
+                FullPath = e.OldFullPath,
+                Name = e.OldName
+            };
+            var args = new ExplorerItemRenamedEventArgs(item, oldItem);
             _itemRenamed?.Invoke(this, args);
         }
 
         private void OnFileSystemCreated(object sender, FileSystemEventArgs e)
         {
-            var args = new ExplorerItemChangedEventArgs(e.FullPath, e.Name, ExplorerItemChangeType.Created);
+            var item = new FileSystemTreeItem()
+            {
+                FullPath = e.FullPath,
+                Name = e.Name
+            };
+            var args = new ExplorerItemChangedEventArgs(item, ExplorerItemChangeType.Created);
             _itemCreated?.Invoke(this, args);
         }
 

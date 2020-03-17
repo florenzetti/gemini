@@ -1,23 +1,52 @@
 using Caliburn.Micro;
-using Gemini.Framework.Commands;
-using Gemini.Modules.MainMenu;
-using Gemini.Modules.MainMenu.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.ComponentModel.Composition;
+using System.Linq;
 
 namespace Gemini.Modules.Explorer.Models
 {
     public abstract class TreeItem : PropertyChangedBase
     {
-        public Guid DocumentId { get; set; }
+        private readonly BindableCollection<TreeItem> _children = new BindableCollection<TreeItem>();
+
         public abstract string Name { get; set; }
         public abstract string FullPath { get; set; }
         public abstract Uri IconSource { get; }
         public abstract bool CanOpenDocument { get; }
-        public abstract IList<TreeItem> Children { get; }
-        public abstract TreeItem FindChildRecursive(string fullPath);
-        public abstract TreeItem AddChild(string fullPath);
-        public abstract void RemoveChild(string fullPath);
+        public Guid DocumentId { get; set; }
+        public IReadOnlyList<TreeItem> Children => _children;
+
+        public virtual void AddChild(TreeItem item)
+        {
+            _children.Add(item);
+        }
+        public virtual void RemoveChild(TreeItem item)
+        {
+            _children.Remove(item);
+        }
+        public virtual TreeItem FindChildRecursive(TreeItem item)
+        {
+            return FindChildRecursive(item.FullPath, this);
+        }
+
+        protected static TreeItem FindChildRecursive(string fullPath, TreeItem root)
+        {
+            TreeItem result = null;
+            if (root.FullPath == fullPath)
+                result = root;
+            else
+            {
+                result = root.Children.SingleOrDefault(o => o.FullPath == fullPath);
+                if (result == null)
+                {
+                    foreach (var folder in root.Children.Where(o => o.Children.Any()).ToList())
+                    {
+                        FindChildRecursive(fullPath, folder);
+                    }
+                }
+            }
+            return result;
+        }
     }
 }

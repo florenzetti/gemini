@@ -1,8 +1,7 @@
 using Gemini.Framework.Commands;
 using Gemini.Framework.Menus;
+using Gemini.Modules.Explorer.Models;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace Gemini.Modules.Explorer.Menus
@@ -18,5 +17,12 @@ namespace Gemini.Modules.Explorer.Menus
         public override KeyGesture KeyGesture => null;
 
         public override CommandDefinitionBase CommandDefinition => null;
+
+        public Type TargetItemType { get; }
+
+        public ContextMenuDefinition(Type targetTypeItem)
+        {
+            TargetItemType = targetTypeItem;
+        }
     }
 }

@@ -11,7 +11,6 @@ namespace Gemini.Modules.Explorer.Models
 {
     public class FileSystemTreeItem : TreeItem
     {
-        //public Guid DocumentId { get; set; }
         private string _name;
         public override string Name
         {
@@ -46,57 +45,39 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => IconSource);
             }
         }
-        private readonly BindableCollection<TreeItem> _children;
-        public override IList<TreeItem> Children => _children;
-
-        //public override IEnumerable<CommandMenuItem> Commands
-        //{
-        //    get
-        //    {
-        //        yield return new CommandMenuItem();
-        //    }
-        //}
 
         public bool IsFolder { get; private set; }
 
-        public FileSystemTreeItem()
+        public override void AddChild(TreeItem item)
         {
-            _children = new BindableCollection<TreeItem>();
-        }
-
-        public override TreeItem FindChildRecursive(string fullPath)
-        {
-            return FindChildRecursive(fullPath, this);
-        }
-
-        public override TreeItem AddChild(string fullPath)
-        {
-            var parentPath = Path.GetDirectoryName(fullPath);
-            var parentTreeItem = FindChildRecursive(parentPath);
-            if (parentTreeItem == null)
-                return null;
-
-            var attributes = File.GetAttributes(fullPath);
+            //var parentPath = Path.GetDirectoryName(item.FullPath);
+            //var parentTreeItem = FindChildRecursive(parentPath);
+            //if (parentTreeItem == null)
+            //    return null;
+            //File.Create(item.FullPath);
+            //var attributes = File.GetAttributes(item.FullPath);
             var result = new FileSystemTreeItem()
             {
-                Name = Path.GetFileName(fullPath),
-                FullPath = fullPath,
-                IsFolder = attributes.HasFlag(FileAttributes.Directory)
+                Name = Path.GetFileName(item.FullPath),
+                FullPath = item.FullPath//,
+                //IsFolder = attributes.HasFlag(FileAttributes.Directory)
             };
-            parentTreeItem.Children.Add(result);
-
-            return result;
+            base.AddChild(result);
         }
 
-        public override void RemoveChild(string fullPath)
+        public override void RemoveChild(TreeItem item)
         {
-            var parentFolderName = Path.GetDirectoryName(fullPath);
-            var parentTreeItem = FindChildRecursive(parentFolderName);
-            if (parentTreeItem != null)
-            {
-                var treeItem = parentTreeItem.Children.SingleOrDefault(o => o.FullPath == fullPath);
-                parentTreeItem.Children.Remove(treeItem);
-            }
+            if (File.Exists(item.FullPath))
+                File.Delete(item.FullPath);
+            else if (Directory.Exists(item.FullPath))
+                Directory.Delete(item.FullPath, true);
+
+            base.RemoveChild(item);
+        }
+
+        public void Load(FileSystemTreeItem item)
+        {
+            base.AddChild(item);
         }
 
         public static FileSystemTreeItem LoadRecursive(DirectoryInfo rootDirectory)
@@ -110,29 +91,10 @@ namespace Gemini.Modules.Explorer.Models
             };
 
             foreach (var folder in rootDirectory.GetDirectories())
-                result.Children.Add(LoadRecursive(folder));
+                result.Load(LoadRecursive(folder));
             foreach (var file in rootDirectory.GetFiles())
-                result.Children.Add(new FileSystemTreeItem() { Name = file.Name, FullPath = file.FullName, IsFolder = false });
+                result.Load(new FileSystemTreeItem() { Name = file.Name, FullPath = file.FullName, IsFolder = false });
 
-            return result;
-        }
-
-        protected static TreeItem FindChildRecursive(string fullPath, TreeItem root)
-        {
-            TreeItem result = null;
-            if (root.FullPath == fullPath)
-                result = root;
-            else
-            {
-                result = root.Children.SingleOrDefault(o => o.FullPath == fullPath);
-                if (result == null)
-                {
-                    foreach (var folder in root.Children.Where(o => o.Children.Any()).ToList())
-                    {
-                        FindChildRecursive(fullPath, folder);
-                    }
-                }
-            }
             return result;
         }
 

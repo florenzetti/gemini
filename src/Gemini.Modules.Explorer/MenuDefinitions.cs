@@ -1,6 +1,7 @@
 using Gemini.Framework.Menus;
 using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Menus;
+using Gemini.Modules.Explorer.Models;
 using System.ComponentModel.Composition;
 
 namespace Gemini.Modules.Explorer
@@ -9,7 +10,7 @@ namespace Gemini.Modules.Explorer
     {
         //Tree view context menu
         [Export]
-        public static ContextMenuDefinition ContextMenuDefinition = new ContextMenuDefinition();
+        public static ContextMenuDefinition ContextMenuDefinition = new ContextMenuDefinition(typeof(FileSystemTreeItem));
 
         [Export]
         public static ContextMenuItemGroupDefinition EditMenuGroupItemDefinition = new ContextMenuItemGroupDefinition(ContextMenuDefinition, 1);

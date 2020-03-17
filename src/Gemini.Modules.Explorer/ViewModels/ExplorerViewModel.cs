@@ -2,12 +2,14 @@ using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Commands;
 using Gemini.Framework.Services;
+using Gemini.Framework.Threading;
+using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Menus;
 //using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Services;
-using Gemini.Modules.MainMenu;
-using Gemini.Modules.MainMenu.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,7 +19,8 @@ using System.Windows.Input;
 namespace Gemini.Modules.Explorer.ViewModels
 {
     [Export(typeof(IExplorerTool))]
-    public class ExplorerViewModel : Tool, IExplorerTool
+    public class ExplorerViewModel : Tool, IExplorerTool,
+        ICommandHandler<TreeItemDeleteCommandDefinition>
     {
         public string FullPath => _explorerProvider.SourceName;
 
@@ -32,7 +35,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         private readonly IEditorProvider _editorProvider;
         //private readonly ICommandRouter _commandRouter;
         private readonly ICommandService _commandService;
-        private readonly ContextMenuModel _menuModel;
+        private readonly IDictionary<Type, ContextMenuModel> _menuModels;
         public bool IsSourceOpened => _explorerProvider.IsOpened;
 
         public override PaneLocation PreferredLocation
@@ -42,7 +45,20 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public TreeItem SourceTree => _explorerProvider.SourceTree;
 
-        public ContextMenuModel ContextMenuModel => _menuModel;
+        private IList<TreeItem> _selectedItems;
+        public IList<TreeItem> SelectedItems
+        {
+            get
+            {
+                if (_selectedItems == null)
+                    _selectedItems = new BindableCollection<TreeItem>();
+                return _selectedItems;
+            }
+        }
+
+        public bool IsEditing { get; set; }
+
+        public ContextMenuModel ContextMenuModel => _menuModels[_selectedItems[0].GetType()];
 
         [ImportingConstructor]
         public ExplorerViewModel(IShell shell,
@@ -61,30 +77,35 @@ namespace Gemini.Modules.Explorer.ViewModels
             _editorProvider = editorProvider;
             _commandService = commandService;
             //_commandRouter = commandRouter;
-            _menuModel = new ContextMenuModel();
-            menuBuilder.BuildMenu(MenuDefinitions.ContextMenuDefinition, _menuModel);
+            _menuModels = new Dictionary<Type, ContextMenuModel>();
+            foreach (var itemType in _explorerProvider.ItemTypes)
+            {
+                var menuModel = new ContextMenuModel();
+                menuBuilder.BuildMenu(itemType, menuModel);
+                _menuModels.Add(itemType, menuModel);
+            }
 
             DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
         }
 
         private void OnExplorerProviderItemRenamed(object sender, ExplorerItemRenamedEventArgs e)
         {
-            var treeItem = SourceTree.FindChildRecursive(e.OldFullPath);
+            var treeItem = SourceTree.FindChildRecursive(e.OldItem);
             if (treeItem != null)
             {
-                treeItem.Name = e.Name;
-                treeItem.FullPath = e.FullPath;
+                treeItem.Name = e.Item.Name;
+                treeItem.FullPath = e.Item.FullPath;
             }
         }
 
         private void OnExplorerProviderItemDeleted(object sender, ExplorerItemChangedEventArgs e)
         {
-            SourceTree.RemoveChild(e.FullPath);
+            SourceTree.RemoveChild(e.Item);
         }
 
         private void OnExplorerProviderItemCreated(object sender, ExplorerItemChangedEventArgs e)
         {
-            SourceTree.AddChild(e.FullPath);
+            SourceTree.AddChild(e.Item);
         }
 
         public void OpenSource()
@@ -129,6 +150,20 @@ namespace Gemini.Modules.Explorer.ViewModels
             }
 
             await _shell.OpenDocumentAsync(editor);
+        }
+
+        void ICommandHandler<TreeItemDeleteCommandDefinition>.Update(Command command)
+        {
+        }
+
+        Task ICommandHandler<TreeItemDeleteCommandDefinition>.Run(Command command)
+        {
+            if (MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                _explorerProvider.SourceTree.RemoveChild(_selectedItems[0]);
+                _selectedItems.RemoveAt(0);
+            }
+            return TaskUtility.Completed;
         }
     }
 }
