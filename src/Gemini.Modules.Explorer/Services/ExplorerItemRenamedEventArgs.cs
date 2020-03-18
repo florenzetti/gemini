@@ -7,11 +7,13 @@ namespace Gemini.Modules.Explorer.Services
 {
     public class ExplorerItemRenamedEventArgs : ExplorerItemChangedEventArgs
     {
-        public TreeItem OldItem { get; }
-        internal ExplorerItemRenamedEventArgs(TreeItem item, TreeItem oldItem)
-            : base(item, ExplorerItemChangeType.Renamed)
+        public string NewName { get; }
+        public string NewFullPath { get; }
+        internal ExplorerItemRenamedEventArgs(string newName, string newFullPath, TreeItem oldItem)
+            : base(oldItem, ExplorerItemChangeType.Renamed)
         {
-            OldItem = oldItem;
+            NewName = newName;
+            NewFullPath = newFullPath;
         }
     }
 

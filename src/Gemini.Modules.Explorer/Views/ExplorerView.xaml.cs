@@ -25,10 +25,12 @@ namespace Gemini.Modules.Explorer.Views
 
         private void OnTreeViewSelecting(object sender, SelectionChangedCancelEventArgs e)
         {
-            foreach(var item in e.ItemsToSelect)
-                ((ExplorerViewModel)DataContext).SelectedItems.Add((TreeItem)item);
+            var viewModel = ((ExplorerViewModel)DataContext);
+            foreach (var item in e.ItemsToSelect)
+                viewModel.SelectedItems.Add((TreeItem)item);
             foreach(var item in e.ItemsToUnSelect)
-                ((ExplorerViewModel)DataContext).SelectedItems.Remove((TreeItem)item);
+                viewModel.SelectedItems.Remove((TreeItem)item);
+            viewModel.RefreshContextMenu();
         }
     }
 }

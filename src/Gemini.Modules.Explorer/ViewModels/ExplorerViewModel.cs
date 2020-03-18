@@ -20,8 +20,17 @@ namespace Gemini.Modules.Explorer.ViewModels
 {
     [Export(typeof(IExplorerTool))]
     public class ExplorerViewModel : Tool, IExplorerTool,
-        ICommandHandler<TreeItemDeleteCommandDefinition>
+        ICommandHandler<FolderTreeItemAddCommandDefinition>,
+        ICommandHandler<TreeItemDeleteCommandDefinition>,
+        ICommandHandler<TreeItemRenameCommandDefinition>
     {
+        private readonly IShell _shell;
+        private readonly IExplorerProvider _explorerProvider;
+        private readonly IEditorProvider _editorProvider;
+        //private readonly ICommandRouter _commandRouter;
+        private readonly ICommandService _commandService;
+        private readonly IDictionary<Type, ContextMenuModel> _menuModels;
+
         public string FullPath => _explorerProvider.SourceName;
 
         private RelayCommand _openSourceCommand;
@@ -30,12 +39,6 @@ namespace Gemini.Modules.Explorer.ViewModels
             get { return _openSourceCommand ?? (_openSourceCommand = new RelayCommand(o => OpenSource())); }
         }
 
-        private readonly IShell _shell;
-        private readonly IExplorerProvider _explorerProvider;
-        private readonly IEditorProvider _editorProvider;
-        //private readonly ICommandRouter _commandRouter;
-        private readonly ICommandService _commandService;
-        private readonly IDictionary<Type, ContextMenuModel> _menuModels;
         public bool IsSourceOpened => _explorerProvider.IsOpened;
 
         public override PaneLocation PreferredLocation
@@ -58,7 +61,8 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public bool IsEditing { get; set; }
 
-        public ContextMenuModel ContextMenuModel => _menuModels[_selectedItems[0].GetType()];
+        private ContextMenuModel _contextMenuModel;
+        public ContextMenuModel ContextMenuModel => _contextMenuModel;
 
         [ImportingConstructor]
         public ExplorerViewModel(IShell shell,
@@ -90,11 +94,11 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         private void OnExplorerProviderItemRenamed(object sender, ExplorerItemRenamedEventArgs e)
         {
-            var treeItem = SourceTree.FindChildRecursive(e.OldItem);
+            var treeItem = SourceTree.FindChildRecursive(e.Item.FullPath);
             if (treeItem != null)
             {
-                treeItem.Name = e.Item.Name;
-                treeItem.FullPath = e.Item.FullPath;
+                treeItem.Name = e.NewName;
+                treeItem.FullPath = e.NewFullPath;
             }
         }
 
@@ -106,6 +110,15 @@ namespace Gemini.Modules.Explorer.ViewModels
         private void OnExplorerProviderItemCreated(object sender, ExplorerItemChangedEventArgs e)
         {
             SourceTree.AddChild(e.Item);
+        }
+
+        public void RefreshContextMenu()
+        {
+            if (_menuModels.ContainsKey(_selectedItems[0].GetType()))
+                _contextMenuModel = _menuModels[_selectedItems[0].GetType()];
+            else
+                _contextMenuModel = new ContextMenuModel();
+            NotifyOfPropertyChange(() => ContextMenuModel);
         }
 
         public void OpenSource()
@@ -158,11 +171,37 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         Task ICommandHandler<TreeItemDeleteCommandDefinition>.Run(Command command)
         {
-            if (MessageBox.Show("Are you sure?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete this item?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
+                _explorerProvider.EnableRaisingEvents = false;
                 _explorerProvider.SourceTree.RemoveChild(_selectedItems[0]);
                 _selectedItems.RemoveAt(0);
+                _explorerProvider.EnableRaisingEvents = true;
             }
+            return TaskUtility.Completed;
+        }
+
+        void ICommandHandler<TreeItemRenameCommandDefinition>.Update(Command command)
+        {
+
+        }
+
+        Task ICommandHandler<TreeItemRenameCommandDefinition>.Run(Command command)
+        {
+            _explorerProvider.EnableRaisingEvents = false;
+            _selectedItems[0].IsEditing = true;
+            _explorerProvider.EnableRaisingEvents = true;
+            return TaskUtility.Completed;
+        }
+
+        void ICommandHandler<FolderTreeItemAddCommandDefinition>.Update(Command command)
+        {
+        }
+
+        Task ICommandHandler<FolderTreeItemAddCommandDefinition>.Run(Command command)
+        {
+            _explorerProvider.EnableRaisingEvents = false;
+            _explorerProvider.SourceTree.AddChild(new FileSystemFileTreeItem() { Name = "new file.json", FullPath = _selectedItems[0].FullPath + @"\new file.json" });
             return TaskUtility.Completed;
         }
     }

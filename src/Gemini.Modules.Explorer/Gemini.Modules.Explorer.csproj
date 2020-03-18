@@ -15,10 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="DotNetProjects.TreeViewEx" Version="4.0.8" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\..\TreeViewEx\TreeViewEx\TreeViewEx.csproj" />
     <ProjectReference Include="..\Gemini\Gemini.csproj" />
   </ItemGroup>
 

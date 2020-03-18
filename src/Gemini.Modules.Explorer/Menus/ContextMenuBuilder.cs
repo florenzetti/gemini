@@ -45,26 +45,28 @@ namespace Gemini.Modules.Explorer.Menus
 
         public void BuildMenu(Type itemType, ContextMenuModel result)
         {
-            var menu = _menus.FirstOrDefault(o => o.TargetItemType == itemType);
-            var groups = _menuItemGroups
-                .Where(x => x.Parent == menu)
-                //.Where(x => !_excludeMenus.Contains(x))
-                .OrderBy(x => x.SortOrder);
-
-            foreach (var group in groups)
+            foreach (var menu in _menus.Where(o => o.TargetTypes.Contains(itemType)))
             {
-                var menuItems = _menuItems
-                .Where(x => x.Group == group)
-                //.Where(x => !_excludeMenuItems.Contains(x))
-                .OrderBy(x => x.SortOrder);
+                var groups = _menuItemGroups
+                    .Where(x => x.Parent == menu)
+                    //.Where(x => !_excludeMenus.Contains(x))
+                    .OrderBy(x => x.SortOrder);
 
-                foreach (var menuItem in menuItems)
+                foreach (var group in groups)
                 {
-                    var menuItemModel = (menuItem.CommandDefinition != null)
-                        ? new CommandMenuItem(_commandService.GetCommand(menuItem.CommandDefinition), new TextMenuItem(menuItem))
-                        : (StandardMenuItem)new TextMenuItem(menuItem);
-                    AddGroupsRecursive(menuItem, menuItemModel);
-                    result.Add(menuItemModel);
+                    var menuItems = _menuItems
+                    .Where(x => x.Group == group)
+                    //.Where(x => !_excludeMenuItems.Contains(x))
+                    .OrderBy(x => x.SortOrder);
+
+                    foreach (var menuItem in menuItems)
+                    {
+                        var menuItemModel = (menuItem.CommandDefinition != null)
+                            ? new CommandMenuItem(_commandService.GetCommand(menuItem.CommandDefinition), new TextMenuItem(menuItem))
+                            : (StandardMenuItem)new TextMenuItem(menuItem);
+                        AddGroupsRecursive(menuItem, menuItemModel);
+                        result.Add(menuItemModel);
+                    }
                 }
             }
         }

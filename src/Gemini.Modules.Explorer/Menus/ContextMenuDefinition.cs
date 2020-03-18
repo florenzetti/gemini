@@ -8,7 +8,7 @@ namespace Gemini.Modules.Explorer.Menus
 {
     public class ContextMenuDefinition : MenuDefinitionBase
     {
-        public override int SortOrder => 0;
+        public override int SortOrder { get; }
 
         public override string Text => "";
 
@@ -18,11 +18,15 @@ namespace Gemini.Modules.Explorer.Menus
 
         public override CommandDefinitionBase CommandDefinition => null;
 
-        public Type TargetItemType { get; }
+        public Type[] TargetTypes { get; }
 
-        public ContextMenuDefinition(Type targetTypeItem)
+        public ContextMenuDefinition(int sortOrder, params Type[] targetTypes)
         {
-            TargetItemType = targetTypeItem;
+            if (targetTypes == null)
+                throw new ArgumentNullException(nameof(TargetTypes));
+
+            SortOrder = sortOrder;
+            TargetTypes = targetTypes;
         }
     }
 }

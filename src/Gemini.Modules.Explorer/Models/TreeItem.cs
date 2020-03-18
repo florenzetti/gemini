@@ -10,8 +10,37 @@ namespace Gemini.Modules.Explorer.Models
     {
         private readonly BindableCollection<TreeItem> _children = new BindableCollection<TreeItem>();
 
-        public abstract string Name { get; set; }
-        public abstract string FullPath { get; set; }
+        private string _name;
+        public virtual string Name
+        {
+            get => _name;
+            set
+            {
+                _name = value;
+                NotifyOfPropertyChange(() => Name);
+            }
+        }
+
+        private string _fullPath;
+        public virtual string FullPath
+        {
+            get => _fullPath;
+            set
+            {
+                _fullPath = value;
+                NotifyOfPropertyChange(() => FullPath);
+            }
+        }
+        private bool _isEditing;
+        public virtual bool IsEditing
+        {
+            get => _isEditing;
+            set
+            {
+                _isEditing = value;
+                NotifyOfPropertyChange(() => IsEditing);
+            }
+        }
         public abstract Uri IconSource { get; }
         public abstract bool CanOpenDocument { get; }
         public Guid DocumentId { get; set; }
@@ -23,11 +52,12 @@ namespace Gemini.Modules.Explorer.Models
         }
         public virtual void RemoveChild(TreeItem item)
         {
-            _children.Remove(item);
+            if(_children.Contains(item))
+                _children.Remove(item);
         }
-        public virtual TreeItem FindChildRecursive(TreeItem item)
+        public virtual TreeItem FindChildRecursive(string fullPath)
         {
-            return FindChildRecursive(item.FullPath, this);
+            return FindChildRecursive(fullPath, this);
         }
 
         protected static TreeItem FindChildRecursive(string fullPath, TreeItem root)

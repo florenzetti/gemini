@@ -59,6 +59,7 @@
                         <EventSetter Event="MouseDoubleClick" Handler="OnItemMouseDoubleClick" />
                         <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type views:ExplorerView}}}" />
                         <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsEditing" Value="{Binding IsEditing, Mode=TwoWay}" />
                         <Setter Property="TemplateEdit">
                             <Setter.Value>
                                 <DataTemplate>
