@@ -5,28 +5,30 @@ namespace Gemini.Modules.Explorer.Models
 {
     public class DirectoryTreeItem : FolderTreeItem
     {
-        public override string Name
-        {
-            get => base.Name;
-            set
-            {
-                if (Name != null && Name != value)
-                {
-                    var directoryPath = Path.GetDirectoryName(FullPath);
-                    FullPath = Path.Combine(directoryPath, value);
-                }
-                base.Name = value;
-            }
-        }
+        private string _oldFullPath;
 
-        public override string FullPath
+        public DirectoryTreeItem(string name, string fullPath)
         {
-            get => base.FullPath;
+            Name = name;
+            FullPath = fullPath;
+        }
+        public override bool IsEditing
+        {
+            get => base.IsEditing;
             set
             {
-                if (FullPath != null && FullPath != value)
-                    Directory.Move(FullPath, value);
-                base.FullPath = value;
+                base.IsEditing = value;
+                if (IsEditing)
+                {
+                    _oldFullPath = FullPath;
+                }
+                else
+                {
+                    var directoryName = Path.GetDirectoryName(FullPath);
+                    FullPath = Path.Combine(directoryName, Name);
+                    Directory.Move(_oldFullPath, FullPath);
+                    _oldFullPath = null;
+                }
             }
         }
 
@@ -46,24 +48,22 @@ namespace Gemini.Modules.Explorer.Models
             base.AddChild(item);
         }
 
-        public void Load(TreeItem item)
-        {
-            base.AddChild(item);
-        }
+        //public void Load(TreeItem item)
+        //{
+        //    base.AddChild(item);
+        //}
 
         public static TreeItem LoadRecursive(DirectoryInfo rootDirectory)
         {
-            var result = new DirectoryTreeItem()
+            var result = new DirectoryTreeItem(rootDirectory.Name, rootDirectory.FullName)
             {
-                Name = rootDirectory.Name,
-                FullPath = rootDirectory.FullName,
                 IsExpanded = false
             };
 
             foreach (var folder in rootDirectory.GetDirectories())
-                result.Load(LoadRecursive(folder));
+                result.LoadChild(LoadRecursive(folder));
             foreach (var file in rootDirectory.GetFiles())
-                result.Load(new FileSystemFileTreeItem() { Name = file.Name, FullPath = file.FullName });
+                result.LoadChild(new FileSystemFileTreeItem(file.Name, file.FullName));
 
             return result;
         }

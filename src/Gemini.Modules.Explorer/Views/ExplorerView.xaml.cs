@@ -1,6 +1,7 @@
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.ViewModels;
 using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -31,6 +32,16 @@ namespace Gemini.Modules.Explorer.Views
             foreach(var item in e.ItemsToUnSelect)
                 viewModel.SelectedItems.Remove((TreeItem)item);
             viewModel.RefreshContextMenu();
+        }
+
+        private void OnTreeItemEditing(object sender, RoutedEventArgs e)
+        {
+            ((ExplorerViewModel)DataContext).OnTreeItemEditing();
+        }
+        
+        private void OnTreeItemEdited(object sender, RoutedEventArgs e)
+        {
+            ((ExplorerViewModel)DataContext).OnTreeItemEdited();
         }
     }
 }

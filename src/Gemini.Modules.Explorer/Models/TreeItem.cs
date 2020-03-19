@@ -1,4 +1,5 @@
 using Caliburn.Micro;
+using Gemini.Modules.Explorer.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -11,7 +12,7 @@ namespace Gemini.Modules.Explorer.Models
         private readonly BindableCollection<TreeItem> _children = new BindableCollection<TreeItem>();
 
         private string _name;
-        public virtual string Name
+        public string Name
         {
             get => _name;
             set
@@ -22,7 +23,7 @@ namespace Gemini.Modules.Explorer.Models
         }
 
         private string _fullPath;
-        public virtual string FullPath
+        public string FullPath
         {
             get => _fullPath;
             set
@@ -46,9 +47,14 @@ namespace Gemini.Modules.Explorer.Models
         public Guid DocumentId { get; set; }
         public IReadOnlyList<TreeItem> Children => _children;
 
-        public virtual void AddChild(TreeItem item)
+        public void LoadChild(TreeItem item)
         {
             _children.Add(item);
+        }
+
+        public virtual void AddChild(TreeItem item)
+        {
+            LoadChild(item);
         }
         public virtual void RemoveChild(TreeItem item)
         {

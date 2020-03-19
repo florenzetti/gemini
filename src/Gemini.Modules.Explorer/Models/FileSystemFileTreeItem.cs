@@ -11,31 +11,33 @@ namespace Gemini.Modules.Explorer.Models
 {
     public class FileSystemFileTreeItem : TreeItem
     {
+        private string _oldFullPath;
+        public FileSystemFileTreeItem(string name, string fullPath)
+        {
+            Name = name;
+            FullPath = fullPath;
+        }
+        public override bool IsEditing
+        {
+            get => base.IsEditing;
+            set
+            {
+                base.IsEditing = value;
+                if (IsEditing)
+                {
+                    _oldFullPath = FullPath;
+                }
+                else
+                {
+                    var directoryName = Path.GetDirectoryName(FullPath);
+                    FullPath = Path.Combine(directoryName, Name);
+                    File.Move(_oldFullPath, FullPath);
+                    _oldFullPath = null;
+                }
+            }
+        }
         public override Uri IconSource => GetIconSource();
         public override bool CanOpenDocument => true;
-        public override string Name
-        {
-            get => base.Name;
-            set
-            {
-                if (Name != null && Name != value)
-                {
-                    var directoryPath = Path.GetDirectoryName(FullPath);
-                    FullPath = Path.Combine(directoryPath, value);
-                }
-                base.Name = value;
-            }
-        }
-        public override string FullPath
-        {
-            get => base.FullPath;
-            set
-            {
-                if(FullPath != null && FullPath != value)
-                    File.Move(FullPath, value);
-                base.FullPath = value;
-            }
-        }
 
         public override void RemoveChild(TreeItem item)
         {

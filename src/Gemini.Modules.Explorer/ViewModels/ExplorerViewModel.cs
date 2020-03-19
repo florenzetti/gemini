@@ -59,8 +59,6 @@ namespace Gemini.Modules.Explorer.ViewModels
             }
         }
 
-        public bool IsEditing { get; set; }
-
         private ContextMenuModel _contextMenuModel;
         public ContextMenuModel ContextMenuModel => _contextMenuModel;
 
@@ -75,9 +73,9 @@ namespace Gemini.Modules.Explorer.ViewModels
         {
             _shell = shell;
             _explorerProvider = explorerProvider;
-            _explorerProvider.ItemCreated += OnExplorerProviderItemCreated;
-            _explorerProvider.ItemDeleted += OnExplorerProviderItemDeleted;
-            _explorerProvider.ItemRenamed += OnExplorerProviderItemRenamed;
+            //_explorerProvider.ItemCreated += OnExplorerProviderItemCreated;
+            //_explorerProvider.ItemDeleted += OnExplorerProviderItemDeleted;
+            //_explorerProvider.ItemRenamed += OnExplorerProviderItemRenamed;
             _editorProvider = editorProvider;
             _commandService = commandService;
             //_commandRouter = commandRouter;
@@ -92,25 +90,25 @@ namespace Gemini.Modules.Explorer.ViewModels
             DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
         }
 
-        private void OnExplorerProviderItemRenamed(object sender, ExplorerItemRenamedEventArgs e)
-        {
-            var treeItem = SourceTree.FindChildRecursive(e.Item.FullPath);
-            if (treeItem != null)
-            {
-                treeItem.Name = e.NewName;
-                treeItem.FullPath = e.NewFullPath;
-            }
-        }
+        //private void OnExplorerProviderItemRenamed(object sender, ExplorerItemRenamedEventArgs e)
+        //{
+        //    var treeItem = SourceTree.FindChildRecursive(e.Item.FullPath);
+        //    if (treeItem != null)
+        //    {
+        //        treeItem.Name = e.OldName;
+        //        treeItem.FullPath = e.OldFullPath;
+        //    }
+        //}
 
-        private void OnExplorerProviderItemDeleted(object sender, ExplorerItemChangedEventArgs e)
-        {
-            SourceTree.RemoveChild(e.Item);
-        }
+        //private void OnExplorerProviderItemDeleted(object sender, ExplorerItemChangedEventArgs e)
+        //{
+        //    SourceTree.RemoveChild(e.Item);
+        //}
 
-        private void OnExplorerProviderItemCreated(object sender, ExplorerItemChangedEventArgs e)
-        {
-            SourceTree.AddChild(e.Item);
-        }
+        //private void OnExplorerProviderItemCreated(object sender, ExplorerItemChangedEventArgs e)
+        //{
+        //    SourceTree.AddChild(e.Item);
+        //}
 
         public void RefreshContextMenu()
         {
@@ -165,6 +163,16 @@ namespace Gemini.Modules.Explorer.ViewModels
             await _shell.OpenDocumentAsync(editor);
         }
 
+        public void OnTreeItemEditing()
+        {
+            _explorerProvider.EnableRaisingEvents = false;
+        }
+
+        public void OnTreeItemEdited()
+        {
+            _explorerProvider.EnableRaisingEvents = true;
+        }
+
         void ICommandHandler<TreeItemDeleteCommandDefinition>.Update(Command command)
         {
         }
@@ -188,9 +196,8 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         Task ICommandHandler<TreeItemRenameCommandDefinition>.Run(Command command)
         {
-            _explorerProvider.EnableRaisingEvents = false;
+            //_explorerProvider.EnableRaisingEvents = false;
             _selectedItems[0].IsEditing = true;
-            _explorerProvider.EnableRaisingEvents = true;
             return TaskUtility.Completed;
         }
 
@@ -201,7 +208,8 @@ namespace Gemini.Modules.Explorer.ViewModels
         Task ICommandHandler<FolderTreeItemAddCommandDefinition>.Run(Command command)
         {
             _explorerProvider.EnableRaisingEvents = false;
-            _explorerProvider.SourceTree.AddChild(new FileSystemFileTreeItem() { Name = "new file.json", FullPath = _selectedItems[0].FullPath + @"\new file.json" });
+            _explorerProvider.SourceTree.AddChild(new FileSystemFileTreeItem("new file.json", _selectedItems[0].FullPath + @"\new file.json"));
+            _explorerProvider.EnableRaisingEvents = true;
             return TaskUtility.Completed;
         }
     }
