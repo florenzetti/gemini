@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -38,7 +39,7 @@ namespace Gemini.Modules.Explorer.Services
         {
             get
             {
-                yield return typeof(DirectoryTreeItem);
+                yield return typeof(FileSystemFolderTreeItem);
                 yield return typeof(FileSystemFileTreeItem);
             }
         }
@@ -72,7 +73,7 @@ namespace Gemini.Modules.Explorer.Services
             {
                 _directoryInfo = new DirectoryInfo(folderDialog.SelectedPath);
                 CreateFileSystemWacther(folderDialog.SelectedPath);
-                SourceTree = DirectoryTreeItem.LoadRecursive(_directoryInfo);
+                SourceTree = FileSystemFolderTreeItem.LoadRecursive(_directoryInfo);
             }
             return SourceTree;
         }
@@ -80,6 +81,7 @@ namespace Gemini.Modules.Explorer.Services
         public void Dispose()
         {
             _directoryInfo = null;
+            SourceTree = null;
             _fsWatcher?.Dispose();
             _fsWatcher = null;
         }
@@ -101,9 +103,7 @@ namespace Gemini.Modules.Explorer.Services
         private void OnFileSystemDeleted(object sender, FileSystemEventArgs e)
         {
             var item = SourceTree.FindChildRecursive(e.FullPath);
-            SourceTree.RemoveChild(item);
-            //var args = new ExplorerItemChangedEventArgs(item, ExplorerItemChangeType.Deleted);
-            //_itemDeleted?.Invoke(this, args);
+            item.Parent.RemoveChild(item);
         }
 
         private void OnFileSystemRenamed(object sender, RenamedEventArgs e)
@@ -111,23 +111,19 @@ namespace Gemini.Modules.Explorer.Services
             var item = SourceTree.FindChildRecursive(e.OldFullPath);
             item.Name = Path.GetFileName(e.Name);
             item.FullPath = e.FullPath;
-            //var args = new ExplorerItemRenamedEventArgs(item, e.OldName, e.OldFullPath);
-            //_itemRenamed?.Invoke(this, args);
         }
 
         private void OnFileSystemCreated(object sender, FileSystemEventArgs e)
         {
             TreeItem item;
             var attributes = File.GetAttributes(e.FullPath);
-            var name = Path.GetFileName(e.Name);
             if (attributes.HasFlag(FileAttributes.Directory))
-                item = new DirectoryTreeItem(name, e.FullPath);
+                item = FileSystemFolderTreeItem.LoadRecursive(new DirectoryInfo(e.FullPath));
             else
-                item = new FileSystemFileTreeItem(name, e.FullPath);
-            var parentItem = SourceTree.FindChildRecursive(Path.GetDirectoryName(e.FullPath));
-            parentItem.LoadChild(item);
-            //var args = new ExplorerItemChangedEventArgs(item, ExplorerItemChangeType.Created);
-            //_itemCreated?.Invoke(this, args);
+                item = new FileSystemFileTreeItem(Path.GetFileName(e.Name), e.FullPath);
+
+            var parentDirectoryItem = SourceTree.FindChildRecursive(Path.GetDirectoryName(e.FullPath));
+            parentDirectoryItem.LoadChild(item);
         }
 
         public void Close()

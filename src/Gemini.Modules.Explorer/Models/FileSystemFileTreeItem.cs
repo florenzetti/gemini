@@ -12,11 +12,12 @@ namespace Gemini.Modules.Explorer.Models
     public class FileSystemFileTreeItem : TreeItem
     {
         private string _oldFullPath;
-        public FileSystemFileTreeItem(string name, string fullPath)
+        internal FileSystemFileTreeItem(string name, string fullPath)
         {
             Name = name;
             FullPath = fullPath;
         }
+
         public override bool IsEditing
         {
             get => base.IsEditing;
@@ -39,12 +40,20 @@ namespace Gemini.Modules.Explorer.Models
         public override Uri IconSource => GetIconSource();
         public override bool CanOpenDocument => true;
 
+        public override void MoveTo(TreeItem parent)
+        {
+            FullPath = Path.Combine(parent.FullPath, Name);
+            base.MoveTo(parent);
+        }
+
+        public override void AddChild(TreeItem item)
+        {
+            throw new NotSupportedException();
+        }
+
         public override void RemoveChild(TreeItem item)
         {
-            if (File.Exists(item.FullPath))
-                File.Delete(item.FullPath);
-
-            base.RemoveChild(item);
+            throw new NotSupportedException();
         }
 
         protected virtual Uri GetIconSource()

@@ -3,11 +3,11 @@ using System.IO;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public class DirectoryTreeItem : FolderTreeItem
+    public class FileSystemFolderTreeItem : FolderTreeItem
     {
         private string _oldFullPath;
 
-        public DirectoryTreeItem(string name, string fullPath)
+        internal FileSystemFolderTreeItem(string name, string fullPath)
         {
             Name = name;
             FullPath = fullPath;
@@ -32,10 +32,21 @@ namespace Gemini.Modules.Explorer.Models
             }
         }
 
+        public override void MoveTo(TreeItem parent)
+        {
+            var newFullPath = Path.Combine(parent.FullPath, Name);
+            Directory.Move(FullPath, Path.Combine(parent.FullPath, newFullPath));
+            FullPath = newFullPath;
+            base.MoveTo(parent);
+        }
+
         public override void RemoveChild(TreeItem item)
         {
             if (Directory.Exists(item.FullPath))
                 Directory.Delete(item.FullPath, true);
+            else if (File.Exists(item.FullPath))
+                File.Delete(item.FullPath);
+
             base.RemoveChild(item);
         }
 
@@ -48,14 +59,9 @@ namespace Gemini.Modules.Explorer.Models
             base.AddChild(item);
         }
 
-        //public void Load(TreeItem item)
-        //{
-        //    base.AddChild(item);
-        //}
-
         public static TreeItem LoadRecursive(DirectoryInfo rootDirectory)
         {
-            var result = new DirectoryTreeItem(rootDirectory.Name, rootDirectory.FullName)
+            var result = new FileSystemFolderTreeItem(rootDirectory.Name, rootDirectory.FullName)
             {
                 IsExpanded = false
             };

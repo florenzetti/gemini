@@ -5,7 +5,6 @@ using Gemini.Framework.Services;
 using Gemini.Framework.Threading;
 using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Menus;
-//using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Services;
 using System;
@@ -73,9 +72,6 @@ namespace Gemini.Modules.Explorer.ViewModels
         {
             _shell = shell;
             _explorerProvider = explorerProvider;
-            //_explorerProvider.ItemCreated += OnExplorerProviderItemCreated;
-            //_explorerProvider.ItemDeleted += OnExplorerProviderItemDeleted;
-            //_explorerProvider.ItemRenamed += OnExplorerProviderItemRenamed;
             _editorProvider = editorProvider;
             _commandService = commandService;
             //_commandRouter = commandRouter;
@@ -89,26 +85,6 @@ namespace Gemini.Modules.Explorer.ViewModels
 
             DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
         }
-
-        //private void OnExplorerProviderItemRenamed(object sender, ExplorerItemRenamedEventArgs e)
-        //{
-        //    var treeItem = SourceTree.FindChildRecursive(e.Item.FullPath);
-        //    if (treeItem != null)
-        //    {
-        //        treeItem.Name = e.OldName;
-        //        treeItem.FullPath = e.OldFullPath;
-        //    }
-        //}
-
-        //private void OnExplorerProviderItemDeleted(object sender, ExplorerItemChangedEventArgs e)
-        //{
-        //    SourceTree.RemoveChild(e.Item);
-        //}
-
-        //private void OnExplorerProviderItemCreated(object sender, ExplorerItemChangedEventArgs e)
-        //{
-        //    SourceTree.AddChild(e.Item);
-        //}
 
         public void RefreshContextMenu()
         {
@@ -173,18 +149,32 @@ namespace Gemini.Modules.Explorer.ViewModels
             _explorerProvider.EnableRaisingEvents = true;
         }
 
+        public void OnTreeItemsMoved(TreeItem moveToParent, IEnumerable<TreeItem> itemsMoved)
+        {
+            _explorerProvider.EnableRaisingEvents = false;
+            foreach (var item in itemsMoved)
+            {
+                item.MoveTo(moveToParent);
+            }
+            _explorerProvider.EnableRaisingEvents = true;
+        }
+
         void ICommandHandler<TreeItemDeleteCommandDefinition>.Update(Command command)
         {
         }
 
         Task ICommandHandler<TreeItemDeleteCommandDefinition>.Run(Command command)
         {
-            if (MessageBox.Show("Are you sure you want to delete this item?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to delete this item(s)?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
             {
-                _explorerProvider.EnableRaisingEvents = false;
-                _explorerProvider.SourceTree.RemoveChild(_selectedItems[0]);
-                _selectedItems.RemoveAt(0);
-                _explorerProvider.EnableRaisingEvents = true;
+                foreach (var selectedItem in _selectedItems)
+                {
+                    _explorerProvider.EnableRaisingEvents = false;
+                    var parentItem = selectedItem.Parent;
+                    parentItem.RemoveChild(selectedItem);
+                    _explorerProvider.EnableRaisingEvents = true;
+                }
+                _selectedItems.Clear();
             }
             return TaskUtility.Completed;
         }
@@ -196,7 +186,6 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         Task ICommandHandler<TreeItemRenameCommandDefinition>.Run(Command command)
         {
-            //_explorerProvider.EnableRaisingEvents = false;
             _selectedItems[0].IsEditing = true;
             return TaskUtility.Completed;
         }

@@ -45,10 +45,12 @@ namespace Gemini.Modules.Explorer.Models
         public abstract Uri IconSource { get; }
         public abstract bool CanOpenDocument { get; }
         public Guid DocumentId { get; set; }
+        public TreeItem Parent { get; private set; }
         public IReadOnlyList<TreeItem> Children => _children;
 
-        public void LoadChild(TreeItem item)
+        public virtual void LoadChild(TreeItem item)
         {
+            item.Parent = this;
             _children.Add(item);
         }
 
@@ -58,8 +60,17 @@ namespace Gemini.Modules.Explorer.Models
         }
         public virtual void RemoveChild(TreeItem item)
         {
-            if(_children.Contains(item))
+            if (_children.Contains(item))
+            {
+                item.Parent = null;
                 _children.Remove(item);
+            }
+        }
+        public virtual void MoveTo(TreeItem parent)
+        {
+            Parent.RemoveChild(this);
+            Parent = parent;
+            Parent.AddChild(this);
         }
         public virtual TreeItem FindChildRecursive(string fullPath)
         {
@@ -78,7 +89,9 @@ namespace Gemini.Modules.Explorer.Models
                 {
                     foreach (var folder in root.Children.Where(o => o.Children.Any()).ToList())
                     {
-                        FindChildRecursive(fullPath, folder);
+                        result = FindChildRecursive(fullPath, folder);
+                        if (result != null)
+                            break;
                     }
                 }
             }
