@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -7,6 +8,8 @@ namespace Gemini.Modules.Explorer.Models
 {
     public abstract class FolderTreeItem : TreeItem
     {
+        public abstract bool IsRootFolder { get; }
+
         private bool _isExpanded;
         public bool IsExpanded
         {
@@ -18,6 +21,8 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => IconSource);
             }
         }
+        public override bool CanOpenDocument => false;
+
         public override Uri IconSource
         {
             get
@@ -30,6 +35,5 @@ namespace Gemini.Modules.Explorer.Models
                 return icon;
             }
         }
-        public override bool CanOpenDocument => false;
     }
 }

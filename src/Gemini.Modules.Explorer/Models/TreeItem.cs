@@ -1,13 +1,12 @@
 using Caliburn.Micro;
-using Gemini.Modules.Explorer.Services;
 using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public abstract class TreeItem : PropertyChangedBase
+    public abstract class TreeItem : PropertyChangedBase, IEnumerable<TreeItem>
     {
         private readonly BindableCollection<TreeItem> _children = new BindableCollection<TreeItem>();
 
@@ -48,10 +47,14 @@ namespace Gemini.Modules.Explorer.Models
         public TreeItem Parent { get; private set; }
         public IReadOnlyList<TreeItem> Children => _children;
 
-        public virtual void LoadChild(TreeItem item)
+        public void LoadChild(TreeItem item)
         {
             item.Parent = this;
             _children.Add(item);
+        }
+        public void UnloadChild(TreeItem item)
+        {
+            _children.Remove(item);
         }
 
         public virtual void AddChild(TreeItem item)
@@ -68,9 +71,9 @@ namespace Gemini.Modules.Explorer.Models
         }
         public virtual void MoveTo(TreeItem parent)
         {
-            Parent.RemoveChild(this);
+            Parent.UnloadChild(this);
             Parent = parent;
-            Parent.AddChild(this);
+            Parent.LoadChild(this);
         }
         public virtual TreeItem FindChildRecursive(string fullPath)
         {
@@ -96,6 +99,16 @@ namespace Gemini.Modules.Explorer.Models
                 }
             }
             return result;
+        }
+
+        public IEnumerator<TreeItem> GetEnumerator()
+        {
+            yield return this;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
     }
 }

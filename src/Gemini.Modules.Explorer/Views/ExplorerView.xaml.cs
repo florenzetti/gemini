@@ -78,10 +78,12 @@ namespace Gemini.Modules.Explorer.Views
         private bool CanExecuteTreeItemDrop(object parameter)
         {
             var dropParameters = (DropParameters)parameter;
+            var folderToDrop = dropParameters.DropToItem?.DataContext as FolderTreeItem;
 
-            if (dropParameters.DropToItem?.DataContext is FolderTreeItem)
-                return true;
-            return false;
+            if (folderToDrop == null || dropParameters.Index != -1)
+                return false;
+
+            return true;
         }
     }
 }

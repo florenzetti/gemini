@@ -7,6 +7,8 @@ namespace Gemini.Modules.Explorer.Models
     {
         private string _oldFullPath;
 
+        public override bool IsRootFolder => false;
+
         internal FileSystemFolderTreeItem(string name, string fullPath)
         {
             Name = name;
@@ -32,12 +34,15 @@ namespace Gemini.Modules.Explorer.Models
             }
         }
 
-        public override void MoveTo(TreeItem parent)
+        public override void MoveTo(TreeItem moveToItem)
         {
-            var newFullPath = Path.Combine(parent.FullPath, Name);
-            Directory.Move(FullPath, Path.Combine(parent.FullPath, newFullPath));
+            if (Parent == moveToItem || FindChildRecursive(moveToItem.FullPath) != null)
+                return;
+
+            var newFullPath = Path.Combine(moveToItem.FullPath, Name);
+            Directory.Move(FullPath, newFullPath);
             FullPath = newFullPath;
-            base.MoveTo(parent);
+            base.MoveTo(moveToItem);
         }
 
         public override void RemoveChild(TreeItem item)
@@ -59,7 +64,7 @@ namespace Gemini.Modules.Explorer.Models
             base.AddChild(item);
         }
 
-        public static TreeItem LoadRecursive(DirectoryInfo rootDirectory)
+        public static FolderTreeItem LoadRecursive(DirectoryInfo rootDirectory)
         {
             var result = new FileSystemFolderTreeItem(rootDirectory.Name, rootDirectory.FullName)
             {

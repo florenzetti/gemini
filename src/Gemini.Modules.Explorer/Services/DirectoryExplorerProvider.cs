@@ -1,13 +1,8 @@
-using Gemini.Framework.Commands;
-using Gemini.Framework.Threading;
-using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Gemini.Modules.Explorer.Services
@@ -17,10 +12,6 @@ namespace Gemini.Modules.Explorer.Services
     {
         private FileSystemWatcher _fsWatcher;
         private DirectoryInfo _directoryInfo;
-
-        //private event ExplorerItemChangedEventHandler _itemCreated;
-        //private event ExplorerItemRenamedEventHandler _itemRenamed;
-        //private event ExplorerItemChangedEventHandler _itemDeleted;
 
         public bool EnableRaisingEvents
         {
@@ -47,24 +38,6 @@ namespace Gemini.Modules.Explorer.Services
         public bool IsOpened => SourceTree != null;
         public string SourceName => _directoryInfo?.Name;
         public TreeItem SourceTree { get; private set; }
-
-        //event ExplorerItemChangedEventHandler IExplorerProvider.ItemCreated
-        //{
-        //    add { _itemCreated += value; }
-        //    remove { _itemCreated -= value; }
-        //}
-
-        //event ExplorerItemRenamedEventHandler IExplorerProvider.ItemRenamed
-        //{
-        //    add { _itemRenamed += value; }
-        //    remove { _itemRenamed -= value; }
-        //}
-
-        //event ExplorerItemChangedEventHandler IExplorerProvider.ItemDeleted
-        //{
-        //    add { _itemDeleted += value; }
-        //    remove { _itemDeleted -= value; }
-        //}
 
         public TreeItem Open()
         {

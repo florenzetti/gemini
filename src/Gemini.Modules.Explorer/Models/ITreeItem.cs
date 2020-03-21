@@ -12,6 +12,5 @@ namespace Gemini.Modules.Explorer.Models
         Uri IconSource { get; }
         bool CanOpenDocument { get; }
         IList<TreeItem> Children { get; }
-        IEnumerable<CommandDefinition> Commands { get; }
     }
 }

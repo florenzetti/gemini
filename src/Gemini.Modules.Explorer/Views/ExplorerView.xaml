@@ -42,11 +42,11 @@
                     </Style.Triggers>
                 </Style>
             </Grid.Style>
-            <DockPanel Grid.Row="0">
+            <!--<DockPanel Grid.Row="0">
                 <Image Source="{Binding SourceTree.IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
                 <TextBlock Text="{Binding SourceTree.Name}" />
-            </DockPanel>
-            <tvx:TreeViewEx x:Name="TreeView" Grid.Row="1" ItemsSource="{Binding SourceTree.Children}">
+            </DockPanel>-->
+            <tvx:TreeViewEx x:Name="TreeView" Grid.Row="1" ItemsSource="{Binding SourceTree}">
                 <tvx:TreeViewEx.Style>
                     <Style TargetType="{x:Type tvx:TreeViewEx}">
                         <Setter Property="Background" Value="Transparent" />
