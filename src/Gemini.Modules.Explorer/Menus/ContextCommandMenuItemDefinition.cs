@@ -34,7 +34,7 @@ namespace Gemini.Modules.Explorer.Menus
             get { return _commandDefinition; }
         }
 
-        public ContextCommandMenuItemDefinition(ContextMenuItemGroupDefinition group, int sortOrder)
+        public ContextCommandMenuItemDefinition(ContextMenuGroupDefinition group, int sortOrder)
             : base(group, sortOrder)
         {
             _commandDefinition = IoC.Get<ICommandService>().GetCommandDefinition(typeof(TCommandDefinition));

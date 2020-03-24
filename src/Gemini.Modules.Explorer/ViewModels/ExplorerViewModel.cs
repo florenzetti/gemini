@@ -19,7 +19,7 @@ namespace Gemini.Modules.Explorer.ViewModels
 {
     [Export(typeof(IExplorerTool))]
     public class ExplorerViewModel : Tool, IExplorerTool,
-        ICommandHandler<FolderTreeItemAddCommandDefinition>,
+        ICommandListHandler<FolderTreeItemAddListDefinition>,
         ICommandHandler<TreeItemDeleteCommandDefinition>,
         ICommandHandler<TreeItemRenameCommandDefinition>
     {
@@ -203,11 +203,16 @@ namespace Gemini.Modules.Explorer.ViewModels
             return TaskUtility.Completed;
         }
 
-        void ICommandHandler<FolderTreeItemAddCommandDefinition>.Update(Command command)
+        void ICommandListHandler<FolderTreeItemAddListDefinition>.Populate(Command command, List<Command> commands)
         {
+            commands.Add(new Command(command.CommandDefinition)
+            {
+                Text = "Add new file"
+            });
+
         }
 
-        Task ICommandHandler<FolderTreeItemAddCommandDefinition>.Run(Command command)
+        Task ICommandListHandler<FolderTreeItemAddListDefinition>.Run(Command command)
         {
             _explorerProvider.EnableRaisingEvents = false;
             _explorerProvider.SourceTree.AddChild(new FileSystemFileTreeItem("new file.json", _selectedItems[0].FullPath + @"\new file.json"));

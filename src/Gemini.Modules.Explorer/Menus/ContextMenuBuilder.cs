@@ -16,7 +16,7 @@ namespace Gemini.Modules.Explorer.Menus
         private readonly ICommandService _commandService;
         //private readonly MenuBarDefinition[] _menuBars;
         private readonly ContextMenuDefinition[] _menus;
-        private readonly ContextMenuItemGroupDefinition[] _menuItemGroups;
+        private readonly ContextMenuGroupDefinition[] _menuItemGroups;
         private readonly ContextMenuItemDefinition[] _menuItems;
         //private readonly MenuDefinition[] _excludeMenus;
         //private readonly MenuItemGroupDefinition[] _excludeMenuItemGroups;
@@ -27,7 +27,7 @@ namespace Gemini.Modules.Explorer.Menus
             ICommandService commandService,
             //[ImportMany] MenuBarDefinition[] menuBars,
             [ImportMany] ContextMenuDefinition[] menus,
-            [ImportMany] ContextMenuItemGroupDefinition[] menuItemGroups,
+            [ImportMany] ContextMenuGroupDefinition[] menuItemGroups,
             [ImportMany] ContextMenuItemDefinition[] menuItems)//,
                                                                //[ImportMany] ExcludeMenuDefinition[] excludeMenus,
                                                                //[ImportMany] ExcludeMenuItemGroupDefinition[] excludeMenuItemGroups,
@@ -45,10 +45,11 @@ namespace Gemini.Modules.Explorer.Menus
 
         public void BuildMenu(Type itemType, ContextMenuModel result)
         {
-            foreach (var menu in _menus.Where(o => o.TargetTypes.Contains(itemType)))
+            var itemContextMenus = _menus.Where(o => o.TargetTypes.Contains(itemType)).ToList();
+            for (int i = 0; i < itemContextMenus.Count; i++)
             {
                 var groups = _menuItemGroups
-                    .Where(x => x.Parent == menu)
+                    .Where(x => x.Parent == itemContextMenus[i])
                     //.Where(x => !_excludeMenus.Contains(x))
                     .OrderBy(x => x.SortOrder);
 
@@ -68,6 +69,9 @@ namespace Gemini.Modules.Explorer.Menus
                         result.Add(menuItemModel);
                     }
                 }
+
+                if (i < itemContextMenus.Count - 1)
+                    result.Add(new MenuItemSeparator());
             }
         }
 

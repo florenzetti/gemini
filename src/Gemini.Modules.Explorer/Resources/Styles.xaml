@@ -22,4 +22,6 @@
     <HierarchicalDataTemplate x:Key="menuTemplate" ItemsSource="{Binding Children}">
         <ContentPresenter Content="{Binding Path=Text}" RecognizesAccessKey="True" />
     </HierarchicalDataTemplate>
+
+    <PopupAnimation x:Key="{x:Static SystemParameters.MenuPopupAnimationKey}">None</PopupAnimation>
 </ResourceDictionary>

@@ -9,11 +9,11 @@ namespace Gemini.Modules.Explorer.Menus
 {
     public abstract class ContextMenuItemDefinition : MenuDefinitionBase
     {
-        public ContextMenuItemGroupDefinition Group { get; }
+        public ContextMenuGroupDefinition Group { get; }
 
         public override int SortOrder { get; }
 
-        public ContextMenuItemDefinition(ContextMenuItemGroupDefinition group, int sortOrder)
+        public ContextMenuItemDefinition(ContextMenuGroupDefinition group, int sortOrder)
         {
             Group = group;
             SortOrder = sortOrder;
