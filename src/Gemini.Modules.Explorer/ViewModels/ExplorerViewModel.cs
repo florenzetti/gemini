@@ -38,6 +38,12 @@ namespace Gemini.Modules.Explorer.ViewModels
             get { return _openSourceCommand ?? (_openSourceCommand = new RelayCommand(o => OpenSource())); }
         }
 
+        private RelayCommand _searchCommand;
+        public ICommand SearchCommand
+        {
+            get { return _searchCommand == null ? _searchCommand = new RelayCommand(a => Search(a as string)) : _searchCommand; }
+        }
+
         public bool IsSourceOpened => _explorerProvider.IsOpened;
 
         public override PaneLocation PreferredLocation
@@ -98,6 +104,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         public void OpenSource()
         {
             _explorerProvider.Open();
+
             NotifyOfPropertyChange(() => SourceTree);
             NotifyOfPropertyChange(() => IsSourceOpened);
         }
@@ -157,6 +164,12 @@ namespace Gemini.Modules.Explorer.ViewModels
                 item.MoveTo(moveToParent);
             }
             _explorerProvider.EnableRaisingEvents = true;
+        }
+
+        private void Search(string searchTerm)
+        {
+            SourceTree.Search(searchTerm);
+            NotifyOfPropertyChange(() => SourceTree);
         }
 
         void ICommandHandler<TreeItemDeleteCommandDefinition>.Update(Command command)

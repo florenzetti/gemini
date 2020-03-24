@@ -46,7 +46,7 @@ namespace Gemini.Modules.Explorer.Services
             {
                 _directoryInfo = new DirectoryInfo(folderDialog.SelectedPath);
                 CreateFileSystemWacther(folderDialog.SelectedPath);
-                SourceTree = FileSystemFolderTreeItem.LoadRecursive(_directoryInfo);
+                SourceTree = FileSystemFolderTreeItem.LoadRecursive(_directoryInfo, true);
             }
             return SourceTree;
         }

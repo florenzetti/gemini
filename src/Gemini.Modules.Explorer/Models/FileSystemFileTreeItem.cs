@@ -31,8 +31,12 @@ namespace Gemini.Modules.Explorer.Models
                 else
                 {
                     var directoryName = Path.GetDirectoryName(FullPath);
-                    FullPath = Path.Combine(directoryName, Name);
-                    File.Move(_oldFullPath, FullPath);
+                    var newFullPath = Path.Combine(directoryName, Name);
+                    if (newFullPath != _oldFullPath)
+                    {
+                        FullPath = newFullPath;
+                        File.Move(_oldFullPath, FullPath);
+                    }
                     _oldFullPath = null;
                 }
             }
@@ -40,10 +44,16 @@ namespace Gemini.Modules.Explorer.Models
         public override Uri IconSource => GetIconSource();
         public override bool CanOpenDocument => true;
 
-        public override void MoveTo(TreeItem parent)
+        public override void MoveTo(TreeItem moveToItem)
         {
-            FullPath = Path.Combine(parent.FullPath, Name);
-            base.MoveTo(parent);
+            if (Parent == moveToItem || FindChildRecursive(moveToItem.FullPath) != null)
+                return;
+
+            var newFullPath = Path.Combine(moveToItem.FullPath, Name);
+            File.Move(FullPath, newFullPath);
+            FullPath = newFullPath;
+
+            base.MoveTo(moveToItem);
         }
 
         public override void AddChild(TreeItem item)

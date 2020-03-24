@@ -27,8 +27,12 @@ namespace Gemini.Modules.Explorer.Models
                 else
                 {
                     var directoryName = Path.GetDirectoryName(FullPath);
-                    FullPath = Path.Combine(directoryName, Name);
-                    Directory.Move(_oldFullPath, FullPath);
+                    var newFullPath = Path.Combine(directoryName, Name);
+                    if (_oldFullPath != newFullPath)
+                    {
+                        FullPath = newFullPath;
+                        Directory.Move(_oldFullPath, FullPath);
+                    }
                     _oldFullPath = null;
                 }
             }
@@ -66,13 +70,18 @@ namespace Gemini.Modules.Explorer.Models
 
         public static FolderTreeItem LoadRecursive(DirectoryInfo rootDirectory)
         {
+            return LoadRecursive(rootDirectory, false);
+        }
+
+        public static FolderTreeItem LoadRecursive(DirectoryInfo rootDirectory, bool isRootExpanded)
+        {
             var result = new FileSystemFolderTreeItem(rootDirectory.Name, rootDirectory.FullName)
             {
-                IsExpanded = false
+                IsExpanded = isRootExpanded
             };
 
             foreach (var folder in rootDirectory.GetDirectories())
-                result.LoadChild(LoadRecursive(folder));
+                result.LoadChild(LoadRecursive(folder, false));
             foreach (var file in rootDirectory.GetFiles())
                 result.LoadChild(new FileSystemFileTreeItem(file.Name, file.FullName));
 

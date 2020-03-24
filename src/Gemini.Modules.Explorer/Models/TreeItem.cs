@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 
 namespace Gemini.Modules.Explorer.Models
 {
@@ -43,6 +44,16 @@ namespace Gemini.Modules.Explorer.Models
         }
         public abstract Uri IconSource { get; }
         public abstract bool CanOpenDocument { get; }
+        private Visibility _visibility;
+        public Visibility Visibility
+        {
+            get => _visibility;
+            private set
+            {
+                _visibility = value;
+                NotifyOfPropertyChange(() => Visibility);
+            }
+        }
         public Guid DocumentId { get; set; }
         public TreeItem Parent { get; private set; }
         public IReadOnlyList<TreeItem> Children => _children;
@@ -78,6 +89,36 @@ namespace Gemini.Modules.Explorer.Models
         public virtual TreeItem FindChildRecursive(string fullPath)
         {
             return FindChildRecursive(fullPath, this);
+        }
+        public void Search(string searchTerm)
+        {
+            SearchClearRecursive(this);
+            if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm.Length >= 2)
+            {
+                foreach (var item in Children.Where(x => !x.Name.ToUpper().Contains(searchTerm.ToUpper()) && !x.Name.ToUpper().Equals(searchTerm.ToUpper())))
+                    SearchRecursive(item, searchTerm);
+            }
+        }
+        private void SearchRecursive(TreeItem rootItem, string searchTerm)
+        {
+            foreach (var item in rootItem.Children)
+            {
+                SearchRecursive(item, searchTerm);
+            }
+            if ((!rootItem.Name.ToUpper().Contains(searchTerm.ToUpper()) && !rootItem.Name.ToUpper().Equals(searchTerm.ToUpper()))
+                && !rootItem.Children.Any(o => o.Visibility == Visibility.Visible))
+            {
+                rootItem.Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void SearchClearRecursive(TreeItem rootItem)
+        {
+            rootItem.Visibility = Visibility.Visible;
+            foreach (var item in rootItem.Children)
+            {
+                SearchClearRecursive(item);
+            }
         }
 
         protected static TreeItem FindChildRecursive(string fullPath, TreeItem root)
