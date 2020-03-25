@@ -18,6 +18,14 @@ namespace Gemini.Modules.Explorer.Models
             FullPath = fullPath;
         }
 
+        internal FileSystemFileTreeItem(string name, string fullPath, string content) : this(name, fullPath)
+        {
+            using (var writer = File.CreateText(fullPath))
+            {
+                writer.Write(content);
+            }
+        }
+
         public override bool IsEditing
         {
             get => base.IsEditing;
@@ -69,7 +77,7 @@ namespace Gemini.Modules.Explorer.Models
         protected virtual Uri GetIconSource()
         {
             //TODO: add more icons
-            var icon = new Uri("pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Icons/file.png");
+            var icon = new Uri("pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Icons/document-16.png");
             return icon;
         }
     }

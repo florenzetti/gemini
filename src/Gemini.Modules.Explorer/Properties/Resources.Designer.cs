@@ -61,6 +61,42 @@ namespace Gemini.Modules.Explorer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Add.
+        /// </summary>
+        public static string AddItemButtonText {
+            get {
+                return ResourceManager.GetString("AddItemButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add item.
+        /// </summary>
+        public static string AddItemViewDisplayName {
+            get {
+                return ResourceManager.GetString("AddItemViewDisplayName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type:.
+        /// </summary>
+        public static string AddItemViewType {
+            get {
+                return ResourceManager.GetString("AddItemViewType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string CancelButtonText {
+            get {
+                return ResourceManager.GetString("CancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Close folder.
         /// </summary>
         public static string CloseFolderCommandText {

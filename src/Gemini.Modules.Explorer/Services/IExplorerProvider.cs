@@ -13,6 +13,7 @@ namespace Gemini.Modules.Explorer.Services
         string SourceName { get; }
         TreeItem SourceTree { get; }
         TreeItem Open();
+        TreeItem CreateItem(string name, string fullPath, EditorFileTemplate fileTemplate);
         void Close();
     }
 }

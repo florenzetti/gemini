@@ -2,8 +2,6 @@ using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Commands;
 using Gemini.Framework.Services;
-using Gemini.Framework.Threading;
-using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Services;
@@ -18,16 +16,12 @@ using System.Windows.Input;
 namespace Gemini.Modules.Explorer.ViewModels
 {
     [Export(typeof(IExplorerTool))]
-    public class ExplorerViewModel : Tool, IExplorerTool,
-        ICommandListHandler<FolderTreeItemAddListDefinition>,
-        ICommandHandler<TreeItemDeleteCommandDefinition>,
-        ICommandHandler<TreeItemRenameCommandDefinition>
+    public partial class ExplorerViewModel : Tool, IExplorerTool
     {
         private readonly IShell _shell;
         private readonly IExplorerProvider _explorerProvider;
-        private readonly IEditorProvider _editorProvider;
-        //private readonly ICommandRouter _commandRouter;
-        private readonly ICommandService _commandService;
+        private readonly IEditorProvider[] _editorProviders;
+        private readonly IWindowManager _windowManager;
         private readonly IDictionary<Type, ContextMenuModel> _menuModels;
 
         public string FullPath => _explorerProvider.SourceName;
@@ -70,17 +64,15 @@ namespace Gemini.Modules.Explorer.ViewModels
         [ImportingConstructor]
         public ExplorerViewModel(IShell shell,
             IExplorerProvider explorerProvider,
-            IEditorProvider editorProvider,
-            ICommandService commandService,
-            //,ICommandRouter commandRouter
+            [ImportMany]IEditorProvider[] editorProviders,
+            IWindowManager windowManager,
             ContextMenuBuilder menuBuilder
             )
         {
             _shell = shell;
             _explorerProvider = explorerProvider;
-            _editorProvider = editorProvider;
-            _commandService = commandService;
-            //_commandRouter = commandRouter;
+            _editorProviders = editorProviders;
+            _windowManager = windowManager;
             _menuModels = new Dictionary<Type, ContextMenuModel>();
             foreach (var itemType in _explorerProvider.ItemTypes)
             {
@@ -121,12 +113,16 @@ namespace Gemini.Modules.Explorer.ViewModels
             if (!item.CanOpenDocument)
                 return;
 
-            var editor = _shell.Documents.FirstOrDefault(o => o.Id == item.DocumentId);
-            if (editor == null)
+            var document = _shell.Documents.FirstOrDefault(o => o.Id == item.DocumentId);
+            if (document == null)
             {
-                editor = _editorProvider.Create();
+                var editor = _editorProviders.FirstOrDefault(o => o.Handles(item.FullPath));
+                if (editor == null)
+                    //TODO: error message
+                    return;
+                document = editor.Create();
 
-                var viewAware = (IViewAware)editor;
+                var viewAware = (IViewAware)document;
                 viewAware.ViewAttached += (sender, e) =>
                 {
                     var frameworkElement = (FrameworkElement)e.View;
@@ -135,15 +131,15 @@ namespace Gemini.Modules.Explorer.ViewModels
                     loadedHandler = async (sender2, e2) =>
                     {
                         frameworkElement.Loaded -= loadedHandler;
-                        await _editorProvider.Open(editor, item.FullPath);
+                        await editor.Open(document, item.FullPath);
                     };
                     frameworkElement.Loaded += loadedHandler;
                 };
 
-                item.DocumentId = editor.Id;
+                item.DocumentId = document.Id;
             }
 
-            await _shell.OpenDocumentAsync(editor);
+            await _shell.OpenDocumentAsync(document);
         }
 
         public void OnTreeItemEditing()
@@ -170,54 +166,6 @@ namespace Gemini.Modules.Explorer.ViewModels
         {
             SourceTree.Search(searchTerm);
             NotifyOfPropertyChange(() => SourceTree);
-        }
-
-        void ICommandHandler<TreeItemDeleteCommandDefinition>.Update(Command command)
-        {
-        }
-
-        Task ICommandHandler<TreeItemDeleteCommandDefinition>.Run(Command command)
-        {
-            if (MessageBox.Show("Are you sure you want to delete this item(s)?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
-            {
-                foreach (var selectedItem in _selectedItems)
-                {
-                    _explorerProvider.EnableRaisingEvents = false;
-                    var parentItem = selectedItem.Parent;
-                    parentItem.RemoveChild(selectedItem);
-                    _explorerProvider.EnableRaisingEvents = true;
-                }
-                _selectedItems.Clear();
-            }
-            return TaskUtility.Completed;
-        }
-
-        void ICommandHandler<TreeItemRenameCommandDefinition>.Update(Command command)
-        {
-
-        }
-
-        Task ICommandHandler<TreeItemRenameCommandDefinition>.Run(Command command)
-        {
-            _selectedItems[0].IsEditing = true;
-            return TaskUtility.Completed;
-        }
-
-        void ICommandListHandler<FolderTreeItemAddListDefinition>.Populate(Command command, List<Command> commands)
-        {
-            commands.Add(new Command(command.CommandDefinition)
-            {
-                Text = "Add new file"
-            });
-
-        }
-
-        Task ICommandListHandler<FolderTreeItemAddListDefinition>.Run(Command command)
-        {
-            _explorerProvider.EnableRaisingEvents = false;
-            _explorerProvider.SourceTree.AddChild(new FileSystemFileTreeItem("new file.json", _selectedItems[0].FullPath + @"\new file.json"));
-            _explorerProvider.EnableRaisingEvents = true;
-            return TaskUtility.Completed;
         }
     }
 }

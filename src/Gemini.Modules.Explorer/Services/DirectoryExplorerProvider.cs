@@ -103,5 +103,11 @@ namespace Gemini.Modules.Explorer.Services
         {
             Dispose();
         }
+
+        public TreeItem CreateItem(string name, string fullPath, EditorFileTemplate editorFileTemplate)
+        {
+
+            return new FileSystemFileTreeItem(name, fullPath, editorFileTemplate.Template);
+        }
     }
 }
