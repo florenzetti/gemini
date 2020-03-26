@@ -1,6 +1,5 @@
 using Caliburn.Micro;
 using Gemini.Framework;
-using Gemini.Framework.Commands;
 using Gemini.Framework.Services;
 using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
@@ -21,8 +20,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         private readonly IShell _shell;
         private readonly IExplorerProvider _explorerProvider;
         private readonly IEditorProvider[] _editorProviders;
-        private readonly IWindowManager _windowManager;
-        private readonly IDictionary<Type, ContextMenuModel> _menuModels;
+        private readonly IDictionary<EditorFileTemplate, ContextMenuModel> _menuModels;
 
         public string FullPath => _explorerProvider.SourceName;
 
@@ -47,14 +45,12 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public TreeItem SourceTree => _explorerProvider.SourceTree;
 
-        private IList<TreeItem> _selectedItems;
+        //private IList<TreeItem> _selectedItems;
         public IList<TreeItem> SelectedItems
         {
             get
             {
-                if (_selectedItems == null)
-                    _selectedItems = new BindableCollection<TreeItem>();
-                return _selectedItems;
+                return _explorerProvider?.SourceTree?.GetAllRecursive().Where(o => o.IsSelected).ToList();
             }
         }
 
@@ -65,15 +61,13 @@ namespace Gemini.Modules.Explorer.ViewModels
         public ExplorerViewModel(IShell shell,
             IExplorerProvider explorerProvider,
             [ImportMany]IEditorProvider[] editorProviders,
-            IWindowManager windowManager,
             ContextMenuBuilder menuBuilder
             )
         {
             _shell = shell;
             _explorerProvider = explorerProvider;
             _editorProviders = editorProviders;
-            _windowManager = windowManager;
-            _menuModels = new Dictionary<Type, ContextMenuModel>();
+            _menuModels = new Dictionary<EditorFileTemplate, ContextMenuModel>();
             foreach (var itemType in _explorerProvider.ItemTypes)
             {
                 var menuModel = new ContextMenuModel();
@@ -86,8 +80,8 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public void RefreshContextMenu()
         {
-            if (_menuModels.ContainsKey(_selectedItems[0].GetType()))
-                _contextMenuModel = _menuModels[_selectedItems[0].GetType()];
+            if (_menuModels.ContainsKey(SelectedItems[0].Template))
+                _contextMenuModel = _menuModels[SelectedItems[0].Template];
             else
                 _contextMenuModel = new ContextMenuModel();
             NotifyOfPropertyChange(() => ContextMenuModel);
@@ -144,26 +138,21 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public void OnTreeItemEditing()
         {
-            //_treeItemOldName = _selectedItems.FirstOrDefault(o => o.IsEditing)?.Name;
-            //_explorerProvider.EnableRaisingEvents = false;
         }
 
         public void OnTreeItemEdited(string fullPath, string newName)
         {
             _explorerProvider.UpdateItem(fullPath, newName);
-            //_explorerProvider.EnableRaisingEvents = true;
         }
 
         public void OnTreeItemsMoved(TreeItem moveToParent, IEnumerable<TreeItem> itemsMoved)
         {
-            //_explorerProvider.EnableRaisingEvents = false;
             foreach (var item in itemsMoved)
             {
                 string oldFullPath = item.FullPath;
                 item.MoveTo(moveToParent);
                 _explorerProvider.MoveItem(oldFullPath, item.FullPath);
             }
-            //_explorerProvider.EnableRaisingEvents = true;
         }
 
         private void Search(string searchTerm)

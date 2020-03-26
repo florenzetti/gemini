@@ -1,8 +1,6 @@
 using Gemini.Framework.Commands;
 using Gemini.Framework.Menus;
 using Gemini.Modules.Explorer.Models;
-using Gemini.Modules.Explorer.ViewModels;
-using Gemini.Modules.MainMenu;
 using Gemini.Modules.MainMenu.Models;
 using System;
 using System.ComponentModel.Composition;
@@ -31,7 +29,7 @@ namespace Gemini.Modules.Explorer.Menus
             _menuItems = menuItems;
         }
 
-        public void BuildMenu(Type itemType, ContextMenuModel result)
+        public void BuildMenu(EditorFileTemplate itemType, ContextMenuModel result)
         {
             var itemContextMenus = _menus.Where(o => o.TargetTypes.Contains(itemType)).OrderBy(o => o.SortOrder).ToList();
             for (int i = 0; i < itemContextMenus.Count; i++)

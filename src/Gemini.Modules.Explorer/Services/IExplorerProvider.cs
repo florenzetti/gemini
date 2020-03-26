@@ -1,13 +1,12 @@
 using Gemini.Modules.Explorer.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Gemini.Modules.Explorer.Services
 {
     public interface IExplorerProvider
     {
-        IEnumerable<Type> ItemTypes { get; }
+        IEnumerable<EditorFileTemplate> ItemTypes { get; }
         bool IsOpened { get; }
         string SourceName { get; }
         TreeItem SourceTree { get; }

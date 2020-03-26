@@ -1,14 +1,10 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public abstract class FolderTreeItem : TreeItem
+    public class FolderTreeItem : TreeItem
     {
-        public abstract bool IsRootFolder { get; }
+        public virtual bool IsRootFolder { get; }
 
         private bool _isExpanded;
         public bool IsExpanded
@@ -35,5 +31,10 @@ namespace Gemini.Modules.Explorer.Models
                 return icon;
             }
         }
+
+        public override EditorFileTemplate Template => FolderTemplate.Template;
+
+        public FolderTreeItem(string fullPath, string name) : base(fullPath, name)
+        { }
     }
 }

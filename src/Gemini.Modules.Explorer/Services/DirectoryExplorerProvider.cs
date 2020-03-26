@@ -13,12 +13,12 @@ namespace Gemini.Modules.Explorer.Services
         private FileSystemWatcher _fsWatcher;
         private DirectoryInfo _directoryInfo;
 
-        public IEnumerable<Type> ItemTypes
+        public IEnumerable<EditorFileTemplate> ItemTypes
         {
             get
             {
-                yield return typeof(FileSystemFolderTreeItem);
-                yield return typeof(FileSystemFileTreeItem);
+                yield return FolderTemplate.Template;
+                yield return DefaultFileTemplate.Template;
             }
         }
 
@@ -33,7 +33,7 @@ namespace Gemini.Modules.Explorer.Services
             {
                 _directoryInfo = new DirectoryInfo(folderDialog.SelectedPath);
                 CreateFileSystemWacther(folderDialog.SelectedPath);
-                SourceTree = FileSystemFolderTreeItem.LoadRecursive(_directoryInfo, true);
+                SourceTree = LoadRecursive(_directoryInfo, true);
             }
             return SourceTree;
         }
@@ -78,9 +78,9 @@ namespace Gemini.Modules.Explorer.Services
             TreeItem item;
             var attributes = File.GetAttributes(e.FullPath);
             if (attributes.HasFlag(FileAttributes.Directory))
-                item = FileSystemFolderTreeItem.LoadRecursive(new DirectoryInfo(e.FullPath));
+                item = LoadRecursive(new DirectoryInfo(e.FullPath));
             else
-                item = new FileSystemFileTreeItem(Path.GetFileName(e.Name), e.FullPath);
+                item = new TreeItem(e.FullPath, Path.GetFileName(e.Name));
 
             var parentDirectoryItem = SourceTree.FindChildRecursive(Path.GetDirectoryName(e.FullPath));
             parentDirectoryItem.LoadChild(item);
@@ -99,11 +99,11 @@ namespace Gemini.Modules.Explorer.Services
             _fsWatcher.EnableRaisingEvents = false;
             using (var writer = File.CreateText(fullPath))
             {
-                writer.Write(editorFileTemplate.Template);
+                writer.Write(editorFileTemplate.FileContent);
             }
             _fsWatcher.EnableRaisingEvents = true;
 
-            return new FileSystemFileTreeItem(name, fullPath);
+            return new TreeItem(fullPath, name);
         }
 
         public FolderTreeItem CreateFolder(string fullPath, string name)
@@ -115,7 +115,7 @@ namespace Gemini.Modules.Explorer.Services
             Directory.CreateDirectory(fullPath);
             _fsWatcher.EnableRaisingEvents = true;
 
-            return new FileSystemFolderTreeItem(name, fullPath);
+            return new FolderTreeItem(fullPath, name);
         }
 
         public void UpdateItem(string fullPath, string newName)
@@ -147,6 +147,26 @@ namespace Gemini.Modules.Explorer.Services
             else if (File.Exists(fullPath))
                 File.Delete(fullPath);
             _fsWatcher.EnableRaisingEvents = true;
+        }
+
+        private static FolderTreeItem LoadRecursive(DirectoryInfo rootDirectory)
+        {
+            return LoadRecursive(rootDirectory, false);
+        }
+
+        private static FolderTreeItem LoadRecursive(DirectoryInfo rootDirectory, bool isRootExpanded)
+        {
+            var result = new FolderTreeItem(rootDirectory.FullName, rootDirectory.Name)
+            {
+                IsExpanded = isRootExpanded
+            };
+
+            foreach (var folder in rootDirectory.GetDirectories())
+                result.LoadChild(LoadRecursive(folder, false));
+            foreach (var file in rootDirectory.GetFiles())
+                result.LoadChild(new TreeItem(file.FullName, file.Name));
+
+            return result;
         }
     }
 }

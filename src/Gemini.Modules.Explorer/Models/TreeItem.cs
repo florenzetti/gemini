@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public abstract class TreeItem : PropertyChangedBase, IEnumerable<TreeItem>
+    public class TreeItem : PropertyChangedBase, IEnumerable<TreeItem>
     {
         private readonly BindableCollection<TreeItem> _children = new BindableCollection<TreeItem>();
 
@@ -35,7 +35,8 @@ namespace Gemini.Modules.Explorer.Models
         }
         private bool _isSelected;
         public bool IsSelected
-        {   get => _isSelected;
+        {
+            get => _isSelected;
             set
             {
                 _isSelected = value;
@@ -52,8 +53,19 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => IsEditing);
             }
         }
-        public abstract Uri IconSource { get; }
-        public abstract bool CanOpenDocument { get; }
+        public virtual Uri IconSource
+        {
+            get
+            {
+                //TODO: add more icons
+                var icon = new Uri("pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Icons/document-16.png");
+                return icon;
+            }
+        }
+
+        public virtual EditorFileTemplate Template => DefaultFileTemplate.Template;
+
+        public virtual bool CanOpenDocument => true;
         private Visibility _visibility;
         public Visibility Visibility
         {
@@ -67,6 +79,12 @@ namespace Gemini.Modules.Explorer.Models
         public Guid DocumentId { get; set; }
         public TreeItem Parent { get; private set; }
         public IReadOnlyList<TreeItem> Children => _children;
+
+        public TreeItem(string fullPath, string name)
+        {
+            FullPath = fullPath;
+            Name = name;
+        }
 
         public void LoadChild(TreeItem item)
         {

@@ -18,9 +18,9 @@ namespace Gemini.Modules.Explorer.Menus
 
         public override CommandDefinitionBase CommandDefinition => null;
 
-        public Type[] TargetTypes { get; }
+        public EditorFileTemplate[] TargetTypes { get; }
 
-        public ContextMenuDefinition(int sortOrder, params Type[] targetTypes)
+        public ContextMenuDefinition(int sortOrder, params EditorFileTemplate[] targetTypes)
         {
             if (targetTypes == null)
                 throw new ArgumentNullException(nameof(TargetTypes));

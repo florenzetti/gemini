@@ -2,11 +2,8 @@ using Gemini.Framework.Commands;
 using Gemini.Framework.Threading;
 using Gemini.Modules.Explorer.Properties;
 using Gemini.Modules.Explorer.Services;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 

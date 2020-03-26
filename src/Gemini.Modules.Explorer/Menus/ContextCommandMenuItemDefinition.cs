@@ -1,9 +1,6 @@
 using Caliburn.Micro;
 using Gemini.Framework.Commands;
-using Gemini.Framework.Menus;
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Windows.Input;
 
 namespace Gemini.Modules.Explorer.Menus
