@@ -18,51 +18,44 @@ namespace Gemini.Modules.Explorer.Models
             FullPath = fullPath;
         }
 
-        internal FileSystemFileTreeItem(string name, string fullPath, string content) : this(name, fullPath)
-        {
-            using (var writer = File.CreateText(fullPath))
-            {
-                writer.Write(content);
-            }
-        }
-
-        public override bool IsEditing
-        {
-            get => base.IsEditing;
-            set
-            {
-                base.IsEditing = value;
-                if (IsEditing)
-                {
-                    _oldFullPath = FullPath;
-                }
-                else
-                {
-                    var directoryName = Path.GetDirectoryName(FullPath);
-                    var newFullPath = Path.Combine(directoryName, Name);
-                    if (newFullPath != _oldFullPath)
-                    {
-                        FullPath = newFullPath;
-                        File.Move(_oldFullPath, FullPath);
-                    }
-                    _oldFullPath = null;
-                }
-            }
-        }
+        //public override bool IsEditing
+        //{
+        //    get => base.IsEditing;
+        //    set
+        //    {
+        //        base.IsEditing = value;
+        //        NotifyOfPropertyChange(() => IsEditing);
+        //        if (IsEditing)
+        //        {
+        //            _oldFullPath = FullPath;
+        //        }
+        //        else
+        //        {
+        //            var directoryName = Path.GetDirectoryName(FullPath);
+        //            var newFullPath = Path.Combine(directoryName, Name);
+        //            if (newFullPath != _oldFullPath)
+        //            {
+        //                FullPath = newFullPath;
+        //                File.Move(_oldFullPath, FullPath);
+        //            }
+        //            _oldFullPath = null;
+        //        }
+        //    }
+        //}
         public override Uri IconSource => GetIconSource();
         public override bool CanOpenDocument => true;
 
-        public override void MoveTo(TreeItem moveToItem)
-        {
-            if (Parent == moveToItem || FindChildRecursive(moveToItem.FullPath) != null)
-                return;
+        //public override void MoveTo(TreeItem moveToItem)
+        //{
+        //    if (Parent == moveToItem || FindChildRecursive(moveToItem.FullPath) != null)
+        //        return;
 
-            var newFullPath = Path.Combine(moveToItem.FullPath, Name);
-            File.Move(FullPath, newFullPath);
-            FullPath = newFullPath;
+        //    var newFullPath = Path.Combine(moveToItem.FullPath, Name);
+        //    File.Move(FullPath, newFullPath);
+        //    FullPath = newFullPath;
 
-            base.MoveTo(moveToItem);
-        }
+        //    base.MoveTo(moveToItem);
+        //}
 
         public override void AddChild(TreeItem item)
         {

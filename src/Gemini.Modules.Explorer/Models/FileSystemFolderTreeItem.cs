@@ -14,59 +14,59 @@ namespace Gemini.Modules.Explorer.Models
             Name = name;
             FullPath = fullPath;
         }
-        public override bool IsEditing
-        {
-            get => base.IsEditing;
-            set
-            {
-                base.IsEditing = value;
-                if (IsEditing)
-                {
-                    _oldFullPath = FullPath;
-                }
-                else
-                {
-                    var directoryName = Path.GetDirectoryName(FullPath);
-                    var newFullPath = Path.Combine(directoryName, Name);
-                    if (_oldFullPath != newFullPath)
-                    {
-                        FullPath = newFullPath;
-                        Directory.Move(_oldFullPath, FullPath);
-                    }
-                    _oldFullPath = null;
-                }
-            }
-        }
+        //public override bool IsEditing
+        //{
+        //    get => base.IsEditing;
+        //    set
+        //    {
+        //        base.IsEditing = value;
+        //        if (IsEditing)
+        //        {
+        //            _oldFullPath = FullPath;
+        //        }
+        //        else
+        //        {
+        //            var directoryName = Path.GetDirectoryName(FullPath);
+        //            var newFullPath = Path.Combine(directoryName, Name);
+        //            if (_oldFullPath != newFullPath)
+        //            {
+        //                FullPath = newFullPath;
+        //                Directory.Move(_oldFullPath, FullPath);
+        //            }
+        //            _oldFullPath = null;
+        //        }
+        //    }
+        //}
 
-        public override void MoveTo(TreeItem moveToItem)
-        {
-            if (Parent == moveToItem || FindChildRecursive(moveToItem.FullPath) != null)
-                return;
+        //public override void MoveTo(TreeItem moveToItem)
+        //{
+        //    if (Parent == moveToItem || FindChildRecursive(moveToItem.FullPath) != null)
+        //        return;
 
-            var newFullPath = Path.Combine(moveToItem.FullPath, Name);
-            Directory.Move(FullPath, newFullPath);
-            FullPath = newFullPath;
-            base.MoveTo(moveToItem);
-        }
+        //    var newFullPath = Path.Combine(moveToItem.FullPath, Name);
+        //    Directory.Move(FullPath, newFullPath);
+        //    FullPath = newFullPath;
+        //    base.MoveTo(moveToItem);
+        //}
 
-        public override void RemoveChild(TreeItem item)
-        {
-            if (Directory.Exists(item.FullPath))
-                Directory.Delete(item.FullPath, true);
-            else if (File.Exists(item.FullPath))
-                File.Delete(item.FullPath);
+        //public override void RemoveChild(TreeItem item)
+        //{
+        //    if (Directory.Exists(item.FullPath))
+        //        Directory.Delete(item.FullPath, true);
+        //    else if (File.Exists(item.FullPath))
+        //        File.Delete(item.FullPath);
 
-            base.RemoveChild(item);
-        }
+        //    base.RemoveChild(item);
+        //}
 
-        public override void AddChild(TreeItem item)
-        {
-            if (Directory.Exists(Path.GetDirectoryName(item.FullPath)))
-            {
-                File.Create(item.FullPath);
-            }
-            base.AddChild(item);
-        }
+        //public override void AddChild(TreeItem item)
+        //{
+        //    if (Directory.Exists(Path.GetDirectoryName(item.FullPath)))
+        //    {
+        //        File.Create(item.FullPath);
+        //    }
+        //    base.AddChild(item);
+        //}
 
         public static FolderTreeItem LoadRecursive(DirectoryInfo rootDirectory)
         {

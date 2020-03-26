@@ -95,7 +95,7 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public void OpenSource()
         {
-            _explorerProvider.Open();
+            _explorerProvider.OpenSource();
 
             NotifyOfPropertyChange(() => SourceTree);
             NotifyOfPropertyChange(() => IsSourceOpened);
@@ -103,7 +103,7 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public void CloseSource()
         {
-            _explorerProvider.Close();
+            _explorerProvider.CloseSource();
             NotifyOfPropertyChange(() => SourceTree);
             NotifyOfPropertyChange(() => IsSourceOpened);
         }
@@ -144,22 +144,26 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public void OnTreeItemEditing()
         {
-            _explorerProvider.EnableRaisingEvents = false;
+            //_treeItemOldName = _selectedItems.FirstOrDefault(o => o.IsEditing)?.Name;
+            //_explorerProvider.EnableRaisingEvents = false;
         }
 
-        public void OnTreeItemEdited()
+        public void OnTreeItemEdited(string fullPath, string newName)
         {
-            _explorerProvider.EnableRaisingEvents = true;
+            _explorerProvider.UpdateItem(fullPath, newName);
+            //_explorerProvider.EnableRaisingEvents = true;
         }
 
         public void OnTreeItemsMoved(TreeItem moveToParent, IEnumerable<TreeItem> itemsMoved)
         {
-            _explorerProvider.EnableRaisingEvents = false;
+            //_explorerProvider.EnableRaisingEvents = false;
             foreach (var item in itemsMoved)
             {
+                string oldFullPath = item.FullPath;
                 item.MoveTo(moveToParent);
+                _explorerProvider.MoveItem(oldFullPath, item.FullPath);
             }
-            _explorerProvider.EnableRaisingEvents = true;
+            //_explorerProvider.EnableRaisingEvents = true;
         }
 
         private void Search(string searchTerm)

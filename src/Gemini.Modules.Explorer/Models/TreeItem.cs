@@ -2,6 +2,7 @@ using Caliburn.Micro;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 
@@ -84,6 +85,7 @@ namespace Gemini.Modules.Explorer.Models
         {
             Parent.UnloadChild(this);
             Parent = parent;
+            FullPath = Path.Combine(Parent.FullPath, Name);
             Parent.LoadChild(this);
         }
         public virtual TreeItem FindChildRecursive(string fullPath)

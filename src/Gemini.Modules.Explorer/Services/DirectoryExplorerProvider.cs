@@ -13,18 +13,18 @@ namespace Gemini.Modules.Explorer.Services
         private FileSystemWatcher _fsWatcher;
         private DirectoryInfo _directoryInfo;
 
-        public bool EnableRaisingEvents
-        {
-            get
-            {
-                return _fsWatcher?.EnableRaisingEvents ?? false;
-            }
-            set
-            {
-                if (_fsWatcher != null)
-                    _fsWatcher.EnableRaisingEvents = value;
-            }
-        }
+        //public bool EnableRaisingEvents
+        //{
+        //    get
+        //    {
+        //        return _fsWatcher?.EnableRaisingEvents ?? false;
+        //    }
+        //    set
+        //    {
+        //        if (_fsWatcher != null)
+        //            _fsWatcher.EnableRaisingEvents = value;
+        //    }
+        //}
 
         public IEnumerable<Type> ItemTypes
         {
@@ -39,7 +39,7 @@ namespace Gemini.Modules.Explorer.Services
         public string SourceName => _directoryInfo?.Name;
         public TreeItem SourceTree { get; private set; }
 
-        public TreeItem Open()
+        public TreeItem OpenSource()
         {
             var folderDialog = new FolderBrowserDialog();
             if (folderDialog.ShowDialog() == DialogResult.OK)
@@ -99,15 +99,67 @@ namespace Gemini.Modules.Explorer.Services
             parentDirectoryItem.LoadChild(item);
         }
 
-        public void Close()
+        public void CloseSource()
         {
             Dispose();
         }
 
-        public TreeItem CreateItem(string name, string fullPath, EditorFileTemplate editorFileTemplate)
+        public TreeItem CreateItem(string fullPath, string name, EditorFileTemplate editorFileTemplate)
         {
+            if (!IsOpened)
+                return default;
 
-            return new FileSystemFileTreeItem(name, fullPath, editorFileTemplate.Template);
+            _fsWatcher.EnableRaisingEvents = false;
+            using (var writer = File.CreateText(fullPath))
+            {
+                writer.Write(editorFileTemplate.Template);
+            }
+            _fsWatcher.EnableRaisingEvents = true;
+
+            return new FileSystemFileTreeItem(name, fullPath);
+        }
+
+        public FolderTreeItem CreateFolder(string fullPath, string name)
+        {
+            if (!IsOpened)
+                return default;
+
+            _fsWatcher.EnableRaisingEvents = false;
+            Directory.CreateDirectory(fullPath);
+            _fsWatcher.EnableRaisingEvents = true;
+
+            return new FileSystemFolderTreeItem(name, fullPath);
+        }
+
+        public void UpdateItem(string fullPath, string newName)
+        {
+            var newFullPath = Path.Combine(Path.GetDirectoryName(fullPath), newName);
+            MoveItem(fullPath, newFullPath);
+        }
+
+        public void MoveItem(string fullPath, string newFullPath)
+        {
+            if (!IsOpened || fullPath == newFullPath)
+                return;
+            _fsWatcher.EnableRaisingEvents = false;
+            if (File.Exists(fullPath))
+                File.Move(fullPath, newFullPath);
+            else if (Directory.Exists(fullPath))
+                Directory.Move(fullPath, newFullPath);
+            _fsWatcher.EnableRaisingEvents = true;
+        }
+
+        public void DeleteItem(string fullPath)
+        {
+            if (!IsOpened)
+                return;
+
+            _fsWatcher.EnableRaisingEvents = false;
+            if (Directory.Exists(fullPath))
+                Directory.Delete(fullPath, true);
+            else if (File.Exists(fullPath))
+                File.Delete(fullPath);
+            _fsWatcher.EnableRaisingEvents = true;
         }
     }
 }

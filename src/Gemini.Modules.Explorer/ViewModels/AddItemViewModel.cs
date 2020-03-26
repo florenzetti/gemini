@@ -79,7 +79,9 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public async Task AddItem()
         {
-            var item = _explorerProvider.CreateItem(Path.GetFileName(FileName), FileName, _selectedTemplateItem);
+            var item = _explorerProvider.CreateItem(FileName, Path.GetFileName(FileName), _selectedTemplateItem);
+            var parentFolder = _explorerProvider.SourceTree.FindChildRecursive(Path.GetDirectoryName(FileName));
+            parentFolder.AddChild(item);
             await OpenItemAsync(item);
             await TryCloseAsync(false);
         }

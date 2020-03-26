@@ -42,11 +42,14 @@ namespace Gemini.Modules.Explorer.Views
         private void OnTreeItemEditing(object sender, RoutedEventArgs e)
         {
             ((ExplorerViewModel)DataContext).OnTreeItemEditing();
+            e.Handled = true;
         }
 
         private void OnTreeItemEdited(object sender, RoutedEventArgs e)
         {
-            ((ExplorerViewModel)DataContext).OnTreeItemEdited();
+            var item = ((TreeViewExItem)sender).DataContext as TreeItem;
+            ((ExplorerViewModel)DataContext).OnTreeItemEdited(item.FullPath, item.Name);
+            e.Handled = true;
         }
 
         private void TreeItemDrag(object parameter)

@@ -24,10 +24,11 @@ namespace Gemini.Modules.Explorer.ViewModels
             {
                 foreach (var selectedItem in _selectedItems)
                 {
-                    _explorerProvider.EnableRaisingEvents = false;
+                    //_explorerProvider.EnableRaisingEvents = false;
+                    _explorerProvider.DeleteItem(selectedItem.FullPath);
                     var parentItem = selectedItem.Parent;
                     parentItem.RemoveChild(selectedItem);
-                    _explorerProvider.EnableRaisingEvents = true;
+                    //_explorerProvider.EnableRaisingEvents = true;
                 }
                 _selectedItems.Clear();
             }
