@@ -7,7 +7,6 @@ namespace Gemini.Modules.Explorer.Services
 {
     public interface IExplorerProvider
     {
-        //bool EnableRaisingEvents { get; set; }
         IEnumerable<Type> ItemTypes { get; }
         bool IsOpened { get; }
         string SourceName { get; }

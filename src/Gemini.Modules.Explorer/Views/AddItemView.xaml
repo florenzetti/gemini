@@ -76,8 +76,8 @@
                 <ColumnDefinition SharedSizeGroup="WindowButtons" />
                 <ColumnDefinition SharedSizeGroup="WindowButtons" />
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" IsDefault="True" Content="{x:Static properties:Resources.AddItemButtonText}" Command="{Binding AddItemCommand}" />
-            <Button Grid.Column="1" IsCancel="True" Content="{x:Static properties:Resources.CancelButtonText}" MinWidth="80" cal:Message.Attach="Cancel" />
+            <Button Grid.Column="0" IsDefault="True" Content="{x:Static properties:Resources.AddText}" Command="{Binding AddItemCommand}" />
+            <Button Grid.Column="1" IsCancel="True" Content="{x:Static properties:Resources.CancelText}" MinWidth="80" cal:Message.Attach="Cancel" />
         </Grid>
     </Grid>
 </Window>

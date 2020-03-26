@@ -14,50 +14,36 @@ namespace Gemini.Modules.Explorer.Menus
     public class ContextMenuBuilder
     {
         private readonly ICommandService _commandService;
-        //private readonly MenuBarDefinition[] _menuBars;
         private readonly ContextMenuDefinition[] _menus;
         private readonly ContextMenuGroupDefinition[] _menuItemGroups;
         private readonly ContextMenuItemDefinition[] _menuItems;
-        //private readonly MenuDefinition[] _excludeMenus;
-        //private readonly MenuItemGroupDefinition[] _excludeMenuItemGroups;
-        //private readonly MenuItemDefinition[] _excludeMenuItems;
 
         [ImportingConstructor]
         public ContextMenuBuilder(
             ICommandService commandService,
-            //[ImportMany] MenuBarDefinition[] menuBars,
             [ImportMany] ContextMenuDefinition[] menus,
             [ImportMany] ContextMenuGroupDefinition[] menuItemGroups,
-            [ImportMany] ContextMenuItemDefinition[] menuItems)//,
-                                                               //[ImportMany] ExcludeMenuDefinition[] excludeMenus,
-                                                               //[ImportMany] ExcludeMenuItemGroupDefinition[] excludeMenuItemGroups,
-                                                               //[ImportMany] ExcludeMenuItemDefinition[] excludeMenuItems)
+            [ImportMany] ContextMenuItemDefinition[] menuItems)
         {
             _commandService = commandService;
-            //_menuBars = menuBars;
             _menus = menus;
             _menuItemGroups = menuItemGroups;
             _menuItems = menuItems;
-            //_excludeMenus = excludeMenus.Select(x => x.MenuDefinitionToExclude).ToArray();
-            //_excludeMenuItemGroups = excludeMenuItemGroups.Select(x => x.MenuItemGroupDefinitionToExclude).ToArray();
-            //_excludeMenuItems = excludeMenuItems.Select(x => x.MenuItemDefinitionToExclude).ToArray();
         }
 
         public void BuildMenu(Type itemType, ContextMenuModel result)
         {
-            var itemContextMenus = _menus.Where(o => o.TargetTypes.Contains(itemType)).ToList();
+            var itemContextMenus = _menus.Where(o => o.TargetTypes.Contains(itemType)).OrderBy(o => o.SortOrder).ToList();
             for (int i = 0; i < itemContextMenus.Count; i++)
             {
                 var groups = _menuItemGroups
                     .Where(x => x.Parent == itemContextMenus[i])
-                    //.Where(x => !_excludeMenus.Contains(x))
                     .OrderBy(x => x.SortOrder);
 
                 foreach (var group in groups)
                 {
                     var menuItems = _menuItems
                     .Where(x => x.Group == group)
-                    //.Where(x => !_excludeMenuItems.Contains(x))
                     .OrderBy(x => x.SortOrder);
 
                     foreach (var menuItem in menuItems)
@@ -79,7 +65,6 @@ namespace Gemini.Modules.Explorer.Menus
         {
             var groups = _menuItemGroups
                 .Where(x => x.Parent == menu)
-                //.Where(x => !_excludeMenuItemGroups.Contains(x))
                 .OrderBy(x => x.SortOrder)
                 .ToList();
 
@@ -88,7 +73,6 @@ namespace Gemini.Modules.Explorer.Menus
                 var group = groups[i];
                 var menuItems = _menuItems
                     .Where(x => x.Group == group)
-                    //.Where(x => !_excludeMenuItems.Contains(x))
                     .OrderBy(x => x.SortOrder);
 
                 foreach (var menuItem in menuItems)

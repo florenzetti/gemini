@@ -8,7 +8,7 @@ namespace Gemini.Modules.Explorer.Commands
     {
         public const string CommandName = "File.OpenFolder";
         public override string Name => CommandName;
-        public override string Text => Resources.OpenFolderCommandText;
-        public override string ToolTip => Resources.OpenFolderCommandToolTip;
+        public override string Text => Resources.OpenFolderText;
+        public override string ToolTip => Resources.OpenFolderToolTip;
     }
 }

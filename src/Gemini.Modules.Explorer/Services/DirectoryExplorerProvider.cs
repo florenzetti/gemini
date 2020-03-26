@@ -13,19 +13,6 @@ namespace Gemini.Modules.Explorer.Services
         private FileSystemWatcher _fsWatcher;
         private DirectoryInfo _directoryInfo;
 
-        //public bool EnableRaisingEvents
-        //{
-        //    get
-        //    {
-        //        return _fsWatcher?.EnableRaisingEvents ?? false;
-        //    }
-        //    set
-        //    {
-        //        if (_fsWatcher != null)
-        //            _fsWatcher.EnableRaisingEvents = value;
-        //    }
-        //}
-
         public IEnumerable<Type> ItemTypes
         {
             get

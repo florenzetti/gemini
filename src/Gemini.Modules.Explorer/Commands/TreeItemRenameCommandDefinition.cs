@@ -1,4 +1,5 @@
 using Gemini.Framework.Commands;
+using Gemini.Modules.Explorer.Properties;
 
 namespace Gemini.Modules.Explorer.Commands
 {
@@ -7,7 +8,7 @@ namespace Gemini.Modules.Explorer.Commands
     {
         public const string CommandName = "TreeItem.Rename";
         public override string Name => CommandName;
-        public override string Text => "Rename";
-        public override string ToolTip => "Rename";
+        public override string Text => Resources.RenameText;
+        public override string ToolTip => Resources.RenameToolTip;
     }
 }

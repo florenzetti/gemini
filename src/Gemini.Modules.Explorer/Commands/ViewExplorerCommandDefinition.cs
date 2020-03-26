@@ -8,7 +8,7 @@ namespace Gemini.Modules.Explorer.Commands
     {
         public const string CommandName = "View.Explorer";
         public override string Name => CommandName;
-        public override string Text => Resources.ViewExplorerCommandText;
-        public override string ToolTip => Resources.ViewExplorerCommandToolTip;
+        public override string Text => Resources.ExplorerText;
+        public override string ToolTip => Resources.ExplorerToolTip;
     }
 }

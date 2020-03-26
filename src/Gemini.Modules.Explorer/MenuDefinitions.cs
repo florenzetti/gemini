@@ -2,6 +2,7 @@ using Gemini.Framework.Menus;
 using Gemini.Modules.Explorer.Commands;
 using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
+using Gemini.Modules.Explorer.Properties;
 using System.ComponentModel.Composition;
 
 namespace Gemini.Modules.Explorer
@@ -10,7 +11,7 @@ namespace Gemini.Modules.Explorer
     {
         //Common tree view context menu
         [Export]
-        public static ContextMenuDefinition CommonContextMenuDefinition = new ContextMenuDefinition(1, typeof(FileSystemFileTreeItem), typeof(FileSystemFolderTreeItem));
+        public static ContextMenuDefinition CommonContextMenuDefinition = new ContextMenuDefinition(5, typeof(FileSystemFileTreeItem), typeof(FileSystemFolderTreeItem));
 
         [Export]
         public static ContextMenuGroupDefinition CommonEditMenuGroupDefinition = new ContextMenuGroupDefinition(CommonContextMenuDefinition, 1);
@@ -31,13 +32,13 @@ namespace Gemini.Modules.Explorer
         public static ContextMenuGroupDefinition FolderContextMenuGroupDefinition = new ContextMenuGroupDefinition(FolderContextMenuDefinition, 0);
 
         [Export]
-        public static ContextMenuItemDefinition FolderTextAddMenuItem = new ContextTextMenuItemDefinition(FolderContextMenuGroupDefinition, 1, "Add");
+        public static ContextMenuItemDefinition FolderTextAddMenuItem = new ContextTextMenuItemDefinition(FolderContextMenuGroupDefinition, 1, Resources.AddText);
 
         [Export]
         public static ContextMenuGroupDefinition FolderAddCascadeGroupDefinition = new ContextMenuGroupDefinition(FolderTextAddMenuItem, 0);
 
         [Export]
-        public static ContextMenuItemDefinition FolderAddMenuItem = new ContextCommandMenuItemDefinition<FolderTreeItemAddListDefinition>(
+        public static ContextMenuItemDefinition FolderAddMenuItem = new ContextCommandMenuItemDefinition<FolderTreeItemAddListCommandDefinition>(
             FolderAddCascadeGroupDefinition, 1);
 
         //Main menu

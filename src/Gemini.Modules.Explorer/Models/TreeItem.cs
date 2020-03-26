@@ -33,6 +33,15 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => FullPath);
             }
         }
+        private bool _isSelected;
+        public bool IsSelected
+        {   get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                NotifyOfPropertyChange(() => IsSelected);
+            }
+        }
         private bool _isEditing;
         public virtual bool IsEditing
         {
@@ -121,6 +130,20 @@ namespace Gemini.Modules.Explorer.Models
             {
                 SearchClearRecursive(item);
             }
+        }
+
+        public IEnumerable<TreeItem> GetAllRecursive()
+        {
+            return GetAllRecursive(this);
+        }
+
+        protected static IEnumerable<TreeItem> GetAllRecursive(TreeItem item)
+        {
+            var result = new List<TreeItem>();
+            result.Add(item);
+            foreach (var child in item.Children)
+                result.AddRange(GetAllRecursive(child));
+            return result;
         }
 
         protected static TreeItem FindChildRecursive(string fullPath, TreeItem root)

@@ -61,15 +61,6 @@ namespace Gemini.Modules.Explorer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Add.
-        /// </summary>
-        public static string AddItemButtonText {
-            get {
-                return ResourceManager.GetString("AddItemButtonText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Add item.
         /// </summary>
         public static string AddItemViewDisplayName {
@@ -79,83 +70,155 @@ namespace Gemini.Modules.Explorer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type:.
+        ///   Looks up a localized string similar to Add.
         /// </summary>
-        public static string AddItemViewType {
+        public static string AddText {
             get {
-                return ResourceManager.GetString("AddItemViewType", resourceCulture);
+                return ResourceManager.GetString("AddText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
-        public static string CancelButtonText {
+        public static string CancelText {
             get {
-                return ResourceManager.GetString("CancelButtonText", resourceCulture);
+                return ResourceManager.GetString("CancelText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close folder.
         /// </summary>
-        public static string CloseFolderCommandText {
+        public static string CloseFolderText {
             get {
-                return ResourceManager.GetString("CloseFolderCommandText", resourceCulture);
+                return ResourceManager.GetString("CloseFolderText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Close folder.
         /// </summary>
-        public static string CloseFolderCommandToolTip {
+        public static string CloseFolderToolTip {
             get {
-                return ResourceManager.GetString("CloseFolderCommandToolTip", resourceCulture);
+                return ResourceManager.GetString("CloseFolderToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirmation.
+        /// </summary>
+        public static string ConfirmationText {
+            get {
+                return ResourceManager.GetString("ConfirmationText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this item(s)?.
+        /// </summary>
+        public static string DeleteConfirmationMessage {
+            get {
+                return ResourceManager.GetString("DeleteConfirmationMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DeleteText {
+            get {
+                return ResourceManager.GetString("DeleteText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string DeleteToolTip {
+            get {
+                return ResourceManager.GetString("DeleteToolTip", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Explorer.
         /// </summary>
-        public static string ExplorerViewModel_ExplorerViewModel_Explorer {
+        public static string ExplorerText {
             get {
-                return ResourceManager.GetString("ExplorerViewModel_ExplorerViewModel_Explorer", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open folder.
-        /// </summary>
-        public static string OpenFolderCommandText {
-            get {
-                return ResourceManager.GetString("OpenFolderCommandText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Open folder.
-        /// </summary>
-        public static string OpenFolderCommandToolTip {
-            get {
-                return ResourceManager.GetString("OpenFolderCommandToolTip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Explorer.
-        /// </summary>
-        public static string ViewExplorerCommandText {
-            get {
-                return ResourceManager.GetString("ViewExplorerCommandText", resourceCulture);
+                return ResourceManager.GetString("ExplorerText", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to View folder explorer.
         /// </summary>
-        public static string ViewExplorerCommandToolTip {
+        public static string ExplorerToolTip {
             get {
-                return ResourceManager.GetString("ViewExplorerCommandToolTip", resourceCulture);
+                return ResourceManager.GetString("ExplorerToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New folder.
+        /// </summary>
+        public static string NewFolderText {
+            get {
+                return ResourceManager.GetString("NewFolderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New item.
+        /// </summary>
+        public static string NewItemText {
+            get {
+                return ResourceManager.GetString("NewItemText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder.
+        /// </summary>
+        public static string OpenFolderText {
+            get {
+                return ResourceManager.GetString("OpenFolderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open folder.
+        /// </summary>
+        public static string OpenFolderToolTip {
+            get {
+                return ResourceManager.GetString("OpenFolderToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string RenameText {
+            get {
+                return ResourceManager.GetString("RenameText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rename.
+        /// </summary>
+        public static string RenameToolTip {
+            get {
+                return ResourceManager.GetString("RenameToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type:.
+        /// </summary>
+        public static string TypeText {
+            get {
+                return ResourceManager.GetString("TypeText", resourceCulture);
             }
         }
     }

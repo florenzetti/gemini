@@ -117,37 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="AddItemButtonText" xml:space="preserve">
-    <value>Add</value>
-  </data>
   <data name="AddItemViewDisplayName" xml:space="preserve">
     <value>Add item</value>
   </data>
-  <data name="AddItemViewType" xml:space="preserve">
-    <value>Type:</value>
+  <data name="AddText" xml:space="preserve">
+    <value>Add</value>
   </data>
-  <data name="CancelButtonText" xml:space="preserve">
+  <data name="CancelText" xml:space="preserve">
     <value>Cancel</value>
   </data>
-  <data name="CloseFolderCommandText" xml:space="preserve">
+  <data name="CloseFolderText" xml:space="preserve">
     <value>Close folder</value>
   </data>
-  <data name="CloseFolderCommandToolTip" xml:space="preserve">
+  <data name="CloseFolderToolTip" xml:space="preserve">
     <value>Close folder</value>
   </data>
-  <data name="ExplorerViewModel_ExplorerViewModel_Explorer" xml:space="preserve">
+  <data name="ConfirmationText" xml:space="preserve">
+    <value>Confirmation</value>
+  </data>
+  <data name="DeleteConfirmationMessage" xml:space="preserve">
+    <value>Are you sure you want to delete this item(s)?</value>
+  </data>
+  <data name="DeleteText" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="DeleteToolTip" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="ExplorerText" xml:space="preserve">
     <value>Explorer</value>
   </data>
-  <data name="OpenFolderCommandText" xml:space="preserve">
-    <value>Open folder</value>
-  </data>
-  <data name="OpenFolderCommandToolTip" xml:space="preserve">
-    <value>Open folder</value>
-  </data>
-  <data name="ViewExplorerCommandText" xml:space="preserve">
-    <value>Explorer</value>
-  </data>
-  <data name="ViewExplorerCommandToolTip" xml:space="preserve">
+  <data name="ExplorerToolTip" xml:space="preserve">
     <value>View folder explorer</value>
+  </data>
+  <data name="NewFolderText" xml:space="preserve">
+    <value>New folder</value>
+  </data>
+  <data name="NewItemText" xml:space="preserve">
+    <value>New item</value>
+  </data>
+  <data name="OpenFolderText" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="OpenFolderToolTip" xml:space="preserve">
+    <value>Open folder</value>
+  </data>
+  <data name="RenameText" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="RenameToolTip" xml:space="preserve">
+    <value>Rename</value>
+  </data>
+  <data name="TypeText" xml:space="preserve">
+    <value>Type:</value>
   </data>
 </root>

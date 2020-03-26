@@ -81,7 +81,7 @@ namespace Gemini.Modules.Explorer.ViewModels
                 _menuModels.Add(itemType, menuModel);
             }
 
-            DisplayName = Properties.Resources.ExplorerViewModel_ExplorerViewModel_Explorer;
+            DisplayName = Properties.Resources.ExplorerText;
         }
 
         public void RefreshContextMenu()

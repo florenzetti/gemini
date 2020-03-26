@@ -8,7 +8,7 @@ namespace Gemini.Modules.Explorer.Commands
     {
         public const string CommandName = "File.CloseFolder";
         public override string Name => CommandName;
-        public override string Text => Resources.CloseFolderCommandText;
-        public override string ToolTip => Resources.CloseFolderCommandToolTip;
+        public override string Text => Resources.CloseFolderText;
+        public override string ToolTip => Resources.CloseFolderToolTip;
     }
 }
