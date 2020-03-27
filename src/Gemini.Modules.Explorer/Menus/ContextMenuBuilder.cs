@@ -31,7 +31,9 @@ namespace Gemini.Modules.Explorer.Menus
 
         public void BuildMenu(EditorFileTemplate itemType, ContextMenuModel result)
         {
-            var itemContextMenus = _menus.Where(o => o.TargetTypes.Contains(itemType)).OrderBy(o => o.SortOrder).ToList();
+            var itemContextMenus = _menus
+                .Where(o => o.TargetTypes.Length == 0 || o.TargetTypes.Contains(itemType)).OrderBy(o => o.SortOrder)
+                .ToList();
             for (int i = 0; i < itemContextMenus.Count; i++)
             {
                 var groups = _menuItemGroups

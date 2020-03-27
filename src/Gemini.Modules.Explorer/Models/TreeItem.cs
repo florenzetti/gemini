@@ -43,8 +43,12 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => IsSelected);
             }
         }
+        public IEnumerable<TreeItem> AllSelectedItems
+        {
+            get => GetAllRecursive().Where(o => o.IsSelected);
+        }
         private bool _isEditing;
-        public virtual bool IsEditing
+        public bool IsEditing
         {
             get => _isEditing;
             set
@@ -62,9 +66,6 @@ namespace Gemini.Modules.Explorer.Models
                 return icon;
             }
         }
-
-        public virtual EditorFileTemplate Template => DefaultFileTemplate.Template;
-
         public virtual bool CanOpenDocument => true;
         private Visibility _visibility;
         public Visibility Visibility

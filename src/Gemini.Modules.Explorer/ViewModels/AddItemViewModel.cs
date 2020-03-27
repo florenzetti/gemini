@@ -67,7 +67,8 @@ namespace Gemini.Modules.Explorer.ViewModels
                         {
                             Name = editorFileType.Name,
                             FileExtension = editorFileType.FileExtension,
-                            Description = "Description"
+                            Description = "Description",
+                            IconSource32 = IconSourceUtility.GetByExtension(editorFileType.FileExtension)
                         });
             _selectedTemplateItem = _itemTemplates.FirstOrDefault();
         }

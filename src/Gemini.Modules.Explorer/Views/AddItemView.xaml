@@ -41,13 +41,13 @@
                 <ListBox.ItemContainerStyle>
                     <Style TargetType="{x:Type ListBoxItem}">
                         <EventSetter Event="Selected" Handler="OnListItemSelected" />
-                        <Setter Property="Margin" Value="0 5 0 5" />
+                        <Setter Property="Padding" Value="0 5 0 5" />
                     </Style>
                 </ListBox.ItemContainerStyle>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <DockPanel>
-                            <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" />
+                            <Image Source="{Binding IconSource32, Converter={StaticResource NullableValueConverter}}" />
                             <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="10 0 0 0" />
                         </DockPanel>
                     </DataTemplate>

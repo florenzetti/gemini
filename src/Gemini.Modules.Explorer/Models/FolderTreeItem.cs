@@ -32,9 +32,8 @@ namespace Gemini.Modules.Explorer.Models
             }
         }
 
-        public override EditorFileTemplate Template => FolderTemplate.Template;
-
         public FolderTreeItem(string fullPath, string name) : base(fullPath, name)
-        { }
+        {
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace Gemini.Modules.Explorer
     {
         //Common tree view context menu
         [Export]
-        public static ContextMenuDefinition CommonContextMenuDefinition = new ContextMenuDefinition(5, DefaultFileTemplate.Template, FolderTemplate.Template);
+        public static ContextMenuDefinition CommonContextMenuDefinition = new ContextMenuDefinition(5);
 
         [Export]
         public static ContextMenuGroupDefinition CommonEditMenuGroupDefinition = new ContextMenuGroupDefinition(CommonContextMenuDefinition, 1);
@@ -26,7 +26,7 @@ namespace Gemini.Modules.Explorer
 
         //Folder tree view context menu
         [Export]
-        public static ContextMenuDefinition FolderContextMenuDefinition = new ContextMenuDefinition(0, FolderTemplate.Template);
+        public static ContextMenuDefinition FolderContextMenuDefinition = new ContextMenuDefinition(0, DefaultFolderTemplate.DefaultTemplate);
 
         [Export]
         public static ContextMenuGroupDefinition FolderContextMenuGroupDefinition = new ContextMenuGroupDefinition(FolderContextMenuDefinition, 0);

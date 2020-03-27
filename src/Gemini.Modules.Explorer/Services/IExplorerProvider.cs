@@ -6,12 +6,13 @@ namespace Gemini.Modules.Explorer.Services
 {
     public interface IExplorerProvider
     {
-        IEnumerable<EditorFileTemplate> ItemTypes { get; }
+        IEnumerable<EditorFileTemplate> ItemTemplates { get; }
         bool IsOpened { get; }
         string SourceName { get; }
         TreeItem SourceTree { get; }
         TreeItem OpenSource();
         void CloseSource();
+        EditorFileTemplate GetTemplate(TreeItem item);
         TreeItem CreateItem(string fullPath, string name, EditorFileTemplate fileTemplate);
         FolderTreeItem CreateFolder(string fullPath, string name);
         void UpdateItem(string fullPath, string newName);

@@ -4,6 +4,7 @@ using Gemini.Framework.Services;
 using Gemini.Modules.Explorer.Menus;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Services;
+using Gemini.Modules.MainMenu.Models;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -15,12 +16,12 @@ using System.Windows.Input;
 namespace Gemini.Modules.Explorer.ViewModels
 {
     [Export(typeof(IExplorerTool))]
-    public partial class ExplorerViewModel : Tool, IExplorerTool
+    public class ExplorerViewModel : Tool, IExplorerTool
     {
         private readonly IShell _shell;
         private readonly IExplorerProvider _explorerProvider;
         private readonly IEditorProvider[] _editorProviders;
-        private readonly IDictionary<EditorFileTemplate, ContextMenuModel> _menuModels;
+        private readonly Dictionary<EditorFileTemplate, ContextMenuModel> _menuModels;
 
         public string FullPath => _explorerProvider.SourceName;
 
@@ -46,16 +47,15 @@ namespace Gemini.Modules.Explorer.ViewModels
         public TreeItem SourceTree => _explorerProvider.SourceTree;
 
         //private IList<TreeItem> _selectedItems;
-        public IList<TreeItem> SelectedItems
-        {
-            get
-            {
-                return _explorerProvider?.SourceTree?.GetAllRecursive().Where(o => o.IsSelected).ToList();
-            }
-        }
+        //public IList<TreeItem> SelectedItems
+        //{
+        //    get
+        //    {
+        //        return _explorerProvider?.SourceTree?.GetAllRecursive().Where(o => o.IsSelected).ToList();
+        //    }
+        //}
 
-        private ContextMenuModel _contextMenuModel;
-        public ContextMenuModel ContextMenuModel => _contextMenuModel;
+        public MenuModel ContextMenuModel => RefreshContextMenu();
 
         [ImportingConstructor]
         public ExplorerViewModel(IShell shell,
@@ -68,7 +68,7 @@ namespace Gemini.Modules.Explorer.ViewModels
             _explorerProvider = explorerProvider;
             _editorProviders = editorProviders;
             _menuModels = new Dictionary<EditorFileTemplate, ContextMenuModel>();
-            foreach (var itemType in _explorerProvider.ItemTypes)
+            foreach (var itemType in _explorerProvider.ItemTemplates)
             {
                 var menuModel = new ContextMenuModel();
                 menuBuilder.BuildMenu(itemType, menuModel);
@@ -78,13 +78,12 @@ namespace Gemini.Modules.Explorer.ViewModels
             DisplayName = Properties.Resources.ExplorerText;
         }
 
-        public void RefreshContextMenu()
+        public MenuModel RefreshContextMenu()
         {
-            if (_menuModels.ContainsKey(SelectedItems[0].Template))
-                _contextMenuModel = _menuModels[SelectedItems[0].Template];
-            else
-                _contextMenuModel = new ContextMenuModel();
-            NotifyOfPropertyChange(() => ContextMenuModel);
+            var item = _explorerProvider.SourceTree.AllSelectedItems.First();
+            return _menuModels[_explorerProvider.GetTemplate(item)];
+            
+            //NotifyOfPropertyChange(() => ContextMenuModel);
         }
 
         public void OpenSource()

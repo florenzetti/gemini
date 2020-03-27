@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Gemini.Modules.Explorer.Services
@@ -13,18 +14,21 @@ namespace Gemini.Modules.Explorer.Services
         private FileSystemWatcher _fsWatcher;
         private DirectoryInfo _directoryInfo;
 
-        public IEnumerable<EditorFileTemplate> ItemTypes
-        {
-            get
-            {
-                yield return FolderTemplate.Template;
-                yield return DefaultFileTemplate.Template;
-            }
-        }
+        private readonly List<EditorFileTemplate> _itemTemplates;
+        public IEnumerable<EditorFileTemplate> ItemTemplates => _itemTemplates;
 
         public bool IsOpened => SourceTree != null;
         public string SourceName => _directoryInfo?.Name;
         public TreeItem SourceTree { get; private set; }
+
+        public DirectoryExplorerProvider()
+        {
+            _itemTemplates = new List<EditorFileTemplate>
+            {
+                DefaultFileTemplate.DefaultTemplate,
+                DefaultFolderTemplate.DefaultTemplate
+            };
+        }
 
         public TreeItem OpenSource()
         {
@@ -91,6 +95,17 @@ namespace Gemini.Modules.Explorer.Services
             Dispose();
         }
 
+        public EditorFileTemplate GetTemplate(TreeItem item)
+        {
+            if (item is FolderTreeItem)
+                return _itemTemplates.First(o => o is DefaultFolderTemplate);
+            else
+            {
+                var template = _itemTemplates.FirstOrDefault(o => o.FileExtension == Path.GetExtension(item.FullPath));
+                return template ?? _itemTemplates.First(o => o is DefaultFileTemplate);
+            }
+        }
+
         public TreeItem CreateItem(string fullPath, string name, EditorFileTemplate editorFileTemplate)
         {
             if (!IsOpened)
@@ -99,7 +114,7 @@ namespace Gemini.Modules.Explorer.Services
             _fsWatcher.EnableRaisingEvents = false;
             using (var writer = File.CreateText(fullPath))
             {
-                writer.Write(editorFileTemplate.FileContent);
+                writer.Write(editorFileTemplate.InitContent);
             }
             _fsWatcher.EnableRaisingEvents = true;
 
