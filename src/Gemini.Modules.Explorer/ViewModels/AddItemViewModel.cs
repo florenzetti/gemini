@@ -31,6 +31,7 @@ namespace Gemini.Modules.Explorer.ViewModels
             set
             {
                 _selectedTemplateItem = value;
+                SetFileExtension(_selectedTemplateItem.FileExtension);
                 NotifyOfPropertyChange(() => SelectedTemplateItem);
             }
         }
@@ -46,8 +47,6 @@ namespace Gemini.Modules.Explorer.ViewModels
             set
             {
                 _parentItem = value;
-                FileName = ParentItem.FullPath;
-
             }
         }
 
@@ -55,7 +54,6 @@ namespace Gemini.Modules.Explorer.ViewModels
         public AddItemViewModel(IShell shell, [ImportMany]IEditorProvider[] editorProviders, IExplorerProvider explorerProvider)
         {
             DisplayName = Resources.AddItemViewDisplayName;
-
             _shell = shell;
             _editorProviders = editorProviders;
             _explorerProvider = explorerProvider;
@@ -71,17 +69,20 @@ namespace Gemini.Modules.Explorer.ViewModels
                             IconSource32 = IconSourceUtility.GetByExtension(editorFileType.FileExtension)
                         });
             _selectedTemplateItem = _itemTemplates.FirstOrDefault();
+            FileName = $"NewFile{_selectedTemplateItem.FileExtension}";
         }
 
         public void SetFileExtension(string fileExtension)
         {
+            FileName = Path.ChangeExtension(FileName, fileExtension);
+            NotifyOfPropertyChange(() => FileName);
         }
 
         public async Task AddItem()
         {
-            var item = _explorerProvider.CreateItem(FileName, Path.GetFileName(FileName), _selectedTemplateItem);
-            var parentFolder = _explorerProvider.SourceTree.FindChildRecursive(Path.GetDirectoryName(FileName));
-            parentFolder.AddChild(item);
+            string fullPath = Path.Combine(ParentItem.FullPath, FileName);
+            var item = _explorerProvider.CreateItem(fullPath, FileName, _selectedTemplateItem);
+            ParentItem.AddChild(item);
             await OpenItemAsync(item);
             await TryCloseAsync(false);
         }
