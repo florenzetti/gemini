@@ -18,7 +18,7 @@
         <!--<converters:NullableValueConverter x:Key="NullableValueConverter" />-->
     </UserControl.Resources>
     <Grid>
-        <Button Content="{x:Static properties:Resources.OpenFolderText}" Command="{Binding OpenOpenSourceCommand}" VerticalAlignment="Top">
+        <Button Content="{Binding OpenSourceButtonText, Mode=OneTime}" Command="{Binding OpenOpenSourceCommand}" VerticalAlignment="Top">
             <Button.Style>
                 <Style TargetType="{x:Type Button}">
                     <Style.Triggers>

@@ -6,7 +6,7 @@ using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-namespace Gemini.Modules.Explorer.Menus
+namespace Gemini.Modules.Explorer.ContextMenu
 {
     [Export(typeof(ContextMenuBuilder))]
     public class ContextMenuBuilder

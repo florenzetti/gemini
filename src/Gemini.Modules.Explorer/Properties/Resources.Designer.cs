@@ -196,6 +196,15 @@ namespace Gemini.Modules.Explorer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string OpenText {
+            get {
+                return ResourceManager.GetString("OpenText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Rename.
         /// </summary>
         public static string RenameText {

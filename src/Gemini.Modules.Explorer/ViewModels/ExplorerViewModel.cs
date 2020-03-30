@@ -1,8 +1,9 @@
 using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Services;
-using Gemini.Modules.Explorer.Menus;
+using Gemini.Modules.Explorer.ContextMenu;
 using Gemini.Modules.Explorer.Models;
+using Gemini.Modules.Explorer.Properties;
 using Gemini.Modules.Explorer.Services;
 using Gemini.Modules.MainMenu.Models;
 using System;
@@ -25,6 +26,8 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public string FullPath => _explorerProvider.SourceName;
 
+        public string OpenSourceButtonText => $"{Resources.OpenText} {_explorerProvider.SourceName}";
+
         private RelayCommand _openSourceCommand;
         public ICommand OpenOpenSourceCommand
         {
@@ -46,14 +49,14 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public TreeItem SourceTree => _explorerProvider.SourceTree;
 
-        //private IList<TreeItem> _selectedItems;
-        //public IList<TreeItem> SelectedItems
-        //{
-        //    get
-        //    {
-        //        return _explorerProvider?.SourceTree?.GetAllRecursive().Where(o => o.IsSelected).ToList();
-        //    }
-        //}
+        public EditorFileTemplate SelectedItemTemplate
+        {
+            get
+            {
+                var item = _explorerProvider.SourceTree.AllSelectedItems.FirstOrDefault();
+                return item != null ? _explorerProvider.GetTemplate(item) : null;
+            }
+        }
 
         public MenuModel ContextMenuModel => RefreshContextMenu();
 
@@ -75,15 +78,13 @@ namespace Gemini.Modules.Explorer.ViewModels
                 _menuModels.Add(itemType, menuModel);
             }
 
-            DisplayName = Properties.Resources.ExplorerText;
+            DisplayName = Resources.ExplorerText;
         }
 
         public MenuModel RefreshContextMenu()
         {
             var item = _explorerProvider.SourceTree.AllSelectedItems.First();
             return _menuModels[_explorerProvider.GetTemplate(item)];
-            
-            //NotifyOfPropertyChange(() => ContextMenuModel);
         }
 
         public void OpenSource()

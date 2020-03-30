@@ -1,6 +1,6 @@
 using Gemini.Framework.Menus;
 
-namespace Gemini.Modules.Explorer.Menus
+namespace Gemini.Modules.Explorer.ContextMenu
 {
     public class ContextMenuGroupDefinition
     {

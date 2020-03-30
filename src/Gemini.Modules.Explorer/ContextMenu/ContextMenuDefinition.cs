@@ -4,7 +4,7 @@ using Gemini.Modules.Explorer.Models;
 using System;
 using System.Windows.Input;
 
-namespace Gemini.Modules.Explorer.Menus
+namespace Gemini.Modules.Explorer.ContextMenu
 {
     public class ContextMenuDefinition : MenuDefinitionBase
     {

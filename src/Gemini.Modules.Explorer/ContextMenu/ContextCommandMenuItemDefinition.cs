@@ -3,7 +3,7 @@ using Gemini.Framework.Commands;
 using System;
 using System.Windows.Input;
 
-namespace Gemini.Modules.Explorer.Menus
+namespace Gemini.Modules.Explorer.ContextMenu
 {
     public class ContextCommandMenuItemDefinition<TCommandDefinition> : ContextMenuItemDefinition
         where TCommandDefinition : CommandDefinitionBase

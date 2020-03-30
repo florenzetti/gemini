@@ -1,6 +1,6 @@
 using Gemini.Framework.Menus;
 using Gemini.Modules.Explorer.Commands;
-using Gemini.Modules.Explorer.Menus;
+using Gemini.Modules.Explorer.ContextMenu;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Properties;
 using System.ComponentModel.Composition;

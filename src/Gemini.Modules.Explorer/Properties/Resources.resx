@@ -162,6 +162,9 @@
   <data name="OpenFolderToolTip" xml:space="preserve">
     <value>Open folder</value>
   </data>
+  <data name="OpenText" xml:space="preserve">
+    <value>Open</value>
+  </data>
   <data name="RenameText" xml:space="preserve">
     <value>Rename</value>
   </data>

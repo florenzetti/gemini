@@ -9,6 +9,14 @@
 
     <Image x:Key="MenuItemIcon" x:Shared="false" Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" />
 
+    <Style x:Key="ContextMenu" TargetType="{x:Type controls:ContextMenuEx}">
+        <Style.Triggers>
+            <Trigger Property="HasItems" Value="False">
+                <Setter Property="Visibility" Value="Collapsed" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <Style x:Key="MenuItem" TargetType="{x:Type controls:MenuItemEx}">
         <Setter Property="Visibility" Value="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         <Setter Property="InputGestureText" Value="{Binding InputGestureText}" />
