@@ -27,6 +27,7 @@ namespace Gemini.Modules.Explorer.Views
         {
             var item = ((TreeViewExItem)sender).DataContext as TreeItem;
             ((ExplorerViewModel)DataContext).OpenItemAsync(item);
+            args.Handled = true;
         }
 
         private void OnTreeViewSelecting(object sender, SelectionChangedCancelEventArgs e)

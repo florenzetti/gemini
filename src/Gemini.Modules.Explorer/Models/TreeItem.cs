@@ -109,10 +109,14 @@ namespace Gemini.Modules.Explorer.Models
                 _children.Remove(item);
             }
         }
-        public virtual void MoveTo(TreeItem parent)
+        public virtual void MoveTo(TreeItem moveToItem)
         {
+            if (moveToItem == this
+                || FindChildRecursive(moveToItem.FullPath) != null) //trying to move to a child folder
+                return;
+
             Parent.UnloadChild(this);
-            Parent = parent;
+            Parent = moveToItem;
             FullPath = Path.Combine(Parent.FullPath, Name);
             Parent.LoadChild(this);
         }
