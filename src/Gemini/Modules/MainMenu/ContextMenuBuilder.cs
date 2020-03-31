@@ -1,12 +1,13 @@
 using Gemini.Framework.Commands;
 using Gemini.Framework.Menus;
-using Gemini.Modules.Explorer.Models;
+using Gemini.Framework.Menus.ContextMenu;
+using Gemini.Framework.Services;
 using Gemini.Modules.MainMenu.Models;
 using System;
 using System.ComponentModel.Composition;
 using System.Linq;
 
-namespace Gemini.Modules.Explorer.ContextMenu
+namespace Gemini.Modules.MainMenu
 {
     [Export(typeof(ContextMenuBuilder))]
     public class ContextMenuBuilder

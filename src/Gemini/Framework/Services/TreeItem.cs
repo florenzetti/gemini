@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Windows;
 
-namespace Gemini.Modules.Explorer.Models
+namespace Gemini.Framework.Services
 {
     public class TreeItem : PropertyChangedBase, IEnumerable<TreeItem>
     {

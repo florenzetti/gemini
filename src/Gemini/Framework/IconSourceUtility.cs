@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Gemini.Modules.Explorer
+namespace Gemini.Framework
 {
     public static class IconSourceUtility
     {

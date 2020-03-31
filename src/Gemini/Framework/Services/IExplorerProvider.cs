@@ -1,8 +1,6 @@
-using Gemini.Modules.Explorer.Models;
-using System;
 using System.Collections.Generic;
 
-namespace Gemini.Modules.Explorer.Services
+namespace Gemini.Framework.Services
 {
     public interface IExplorerProvider
     {

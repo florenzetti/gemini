@@ -1,6 +1,6 @@
 using System;
 
-namespace Gemini.Modules.Explorer.Models
+namespace Gemini.Framework.Services
 {
     public class FolderTreeItem : TreeItem
     {

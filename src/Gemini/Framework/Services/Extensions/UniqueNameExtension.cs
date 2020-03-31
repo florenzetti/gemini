@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Gemini.Modules.Explorer.Models
+namespace Gemini.Framework.Services
 {
     public static class UniqueNameExtension
     {

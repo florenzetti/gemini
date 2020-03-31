@@ -1,6 +1,4 @@
-using Gemini.Framework.Menus;
-
-namespace Gemini.Modules.Explorer.ContextMenu
+namespace Gemini.Framework.Menus.ContextMenu
 {
     public abstract class ContextMenuItemDefinition : MenuDefinitionBase
     {

@@ -1,5 +1,5 @@
 using Gemini.Framework;
-using Gemini.Modules.Explorer.Models;
+using Gemini.Framework.Services;
 using Gemini.Modules.Explorer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;

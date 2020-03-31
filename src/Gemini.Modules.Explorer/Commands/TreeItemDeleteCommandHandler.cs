@@ -1,7 +1,7 @@
 using Gemini.Framework.Commands;
+using Gemini.Framework.Services;
 using Gemini.Framework.Threading;
 using Gemini.Modules.Explorer.Properties;
-using Gemini.Modules.Explorer.Services;
 using System.ComponentModel.Composition;
 using System.Linq;
 using System.Threading.Tasks;

@@ -1,10 +1,9 @@
 using Gemini.Framework.Commands;
-using Gemini.Framework.Menus;
-using Gemini.Modules.Explorer.Models;
+using Gemini.Framework.Services;
 using System;
 using System.Windows.Input;
 
-namespace Gemini.Modules.Explorer.ContextMenu
+namespace Gemini.Framework.Menus.ContextMenu
 {
     public class ContextMenuDefinition : MenuDefinitionBase
     {

@@ -1,12 +1,9 @@
 using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Services;
-using Gemini.Modules.Explorer.ContextMenu;
-using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Properties;
-using Gemini.Modules.Explorer.Services;
+using Gemini.Modules.MainMenu;
 using Gemini.Modules.MainMenu.Models;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.Linq;

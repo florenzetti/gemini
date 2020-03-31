@@ -1,6 +1,5 @@
 using Gemini.Framework.Services;
-using Gemini.Modules.Explorer.ContextMenu;
-using Gemini.Modules.Explorer.Services;
+using Gemini.Modules.MainMenu;
 using Gemini.Modules.Explorer.ViewModels;
 
 namespace Gemini.Modules.Explorer

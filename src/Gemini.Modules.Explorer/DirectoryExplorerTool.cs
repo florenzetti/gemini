@@ -1,10 +1,7 @@
 using Gemini.Framework.Services;
-using Gemini.Modules.Explorer.ContextMenu;
+using Gemini.Modules.MainMenu;
 using Gemini.Modules.Explorer.Services;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.Composition;
-using System.Text;
 
 namespace Gemini.Modules.Explorer
 {

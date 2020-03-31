@@ -50,8 +50,4 @@
     <Resource Include="Resources\Icons\folder_open.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Menus\" />
-  </ItemGroup>
-
 </Project>

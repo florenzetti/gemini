@@ -1,4 +1,4 @@
-using Gemini.Modules.Explorer.Models;
+using Gemini.Framework.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;

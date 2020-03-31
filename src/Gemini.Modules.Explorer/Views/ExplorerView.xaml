@@ -6,7 +6,7 @@
              xmlns:dd="clr-namespace:Gemini.Modules.Explorer.Design"
              xmlns:controls="clr-namespace:Gemini.Modules.MainMenu.Controls;assembly=Gemini"
              xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
-             xmlns:model="clr-namespace:Gemini.Modules.Explorer.Models"
+             xmlns:model="clr-namespace:Gemini.Framework.Services;assembly=Gemini"
              xmlns:properties="clr-namespace:Gemini.Modules.Explorer.Properties"
              xmlns:views="clr-namespace:Gemini.Modules.Explorer.Views"
              xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"

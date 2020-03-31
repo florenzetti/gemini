@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Gemini.Modules.MainMenu.Controls;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace Gemini.Modules.MainMenu.Controls
 {
-    public class ContextMenuEx : ContextMenu
+    public class ContextMenuEx : System.Windows.Controls.ContextMenu
     {
         private object _currentItem;
 

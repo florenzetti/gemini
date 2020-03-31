@@ -1,7 +1,7 @@
 using Gemini.Framework.Menus;
+using Gemini.Framework.Menus.ContextMenu;
+using Gemini.Framework.Services;
 using Gemini.Modules.Explorer.Commands;
-using Gemini.Modules.Explorer.ContextMenu;
-using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Properties;
 using System.ComponentModel.Composition;
 
