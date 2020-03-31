@@ -57,15 +57,7 @@ namespace Gemini.Framework.Services
                 NotifyOfPropertyChange(() => IsEditing);
             }
         }
-        public virtual Uri IconSource
-        {
-            get
-            {
-                //TODO: add more icons
-                var icon = new Uri("pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Icons/document-16.png");
-                return icon;
-            }
-        }
+        public virtual Uri IconSource => IconSourceUtility.GetByExtension(Path.GetExtension(Name), 16);
         public virtual bool CanOpenDocument => true;
         private Visibility _visibility;
         public Visibility Visibility

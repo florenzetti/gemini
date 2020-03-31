@@ -160,6 +160,15 @@ namespace Gemini.Modules.Explorer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to folder.
+        /// </summary>
+        public static string FolderText {
+            get {
+                return ResourceManager.GetString("FolderText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New folder.
         /// </summary>
         public static string NewFolderText {

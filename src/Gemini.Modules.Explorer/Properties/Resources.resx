@@ -150,6 +150,9 @@
   <data name="ExplorerToolTip" xml:space="preserve">
     <value>View folder explorer</value>
   </data>
+  <data name="FolderText" xml:space="preserve">
+    <value>folder</value>
+  </data>
   <data name="NewFolderText" xml:space="preserve">
     <value>New folder</value>
   </data>

@@ -1,18 +1,19 @@
 using Gemini.Framework.Services;
 using Gemini.Modules.MainMenu;
 using Gemini.Modules.Explorer.ViewModels;
+using Gemini.Framework;
+using Gemini.Modules.Explorer.Views;
+using Caliburn.Micro;
 
 namespace Gemini.Modules.Explorer
 {
-    public abstract class ExplorerTool<TExplorerProvider> : ExplorerViewModel
-        where TExplorerProvider : IExplorerProvider
+    public abstract class ExplorerTool<TExplorerProvider> : Tool
+        where TExplorerProvider : class, IExplorerProvider
     {
-        public ExplorerTool(IShell shell,
-            TExplorerProvider explorerProvider,
-            IEditorProvider[] editorProviders,
-            ContextMenuBuilder menuBuilder)
-            : base(shell, explorerProvider, editorProviders, menuBuilder)
+        public bool UseDefaultView { get; }
+        public TExplorerProvider GetProvider()
         {
+            return IoC.Get<TExplorerProvider>();
         }
     }
 }

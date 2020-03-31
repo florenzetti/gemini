@@ -6,9 +6,10 @@ namespace Gemini.Framework
 {
     public static class IconSourceUtility
     {
-        public static Uri GetByExtension(string extension)
+        public static Uri GetByExtension(string extension, int dimension)
         {
-            return new Uri("pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Icons/document-32.png");
+            //TODO: add more icons
+            return new Uri($"pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Icons/document-{dimension}.png");
         }
     }
 }

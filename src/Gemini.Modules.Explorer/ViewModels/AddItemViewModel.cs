@@ -64,7 +64,7 @@ namespace Gemini.Modules.Explorer.ViewModels
                             Name = editorFileType.Name,
                             FileExtension = editorFileType.FileExtension,
                             Description = "Description",
-                            IconSource32 = IconSourceUtility.GetByExtension(editorFileType.FileExtension)
+                            IconSource32 = IconSourceUtility.GetByExtension(editorFileType.FileExtension, 32)
                         });
             _selectedTemplateItem = _itemTemplates.FirstOrDefault();
             FileName = $"NewFile{_selectedTemplateItem.FileExtension}";

@@ -26,7 +26,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         public string OpenSourceButtonText => $"{Resources.OpenText} {_explorerProvider.SourceName}";
 
         private RelayCommand _openSourceCommand;
-        public ICommand OpenOpenSourceCommand
+        public ICommand OpenSourceCommand
         {
             get { return _openSourceCommand ?? (_openSourceCommand = new RelayCommand(o => OpenSource())); }
         }
@@ -46,14 +46,6 @@ namespace Gemini.Modules.Explorer.ViewModels
 
         public TreeItem SourceTree => _explorerProvider.SourceTree;
 
-        public EditorFileTemplate SelectedItemTemplate
-        {
-            get
-            {
-                var item = _explorerProvider.SourceTree.AllSelectedItems.FirstOrDefault();
-                return item != null ? _explorerProvider.GetTemplate(item) : null;
-            }
-        }
 
         public MenuModel ContextMenuModel => RefreshContextMenu();
 

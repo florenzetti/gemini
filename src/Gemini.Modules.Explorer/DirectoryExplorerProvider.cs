@@ -1,4 +1,5 @@
 using Gemini.Framework.Services;
+using Gemini.Modules.Explorer.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
@@ -18,7 +19,7 @@ namespace Gemini.Modules.Explorer.Services
         public IEnumerable<EditorFileTemplate> ItemTemplates => _itemTemplates;
 
         public bool IsOpened => SourceTree != null;
-        public string SourceName => _directoryInfo?.Name;
+        public string SourceName => Resources.FolderText;
         public TreeItem SourceTree { get; private set; }
 
         public DirectoryExplorerProvider()
