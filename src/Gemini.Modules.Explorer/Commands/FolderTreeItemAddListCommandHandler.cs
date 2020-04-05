@@ -1,8 +1,7 @@
 using Caliburn.Micro;
 using Gemini.Framework.Commands;
-using Gemini.Framework.Services;
+using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Properties;
-using Gemini.Modules.Explorer.Services;
 using Gemini.Modules.Explorer.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;

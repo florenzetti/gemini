@@ -1,5 +1,7 @@
 using Gemini.Framework;
 using Gemini.Framework.Services;
+using Gemini.Modules.Explorer.Controls;
+using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,37 +20,28 @@ namespace Gemini.Modules.Explorer.Views
         public ExplorerView()
         {
             InitializeComponent();
-            TreeView.OnSelecting += OnTreeViewSelecting;
-            TreeView.DragCommand = new RelayCommand(TreeItemDrag);
-            TreeView.DropCommand = new RelayCommand(TreeItemDrop, CanExecuteTreeItemDrop);
+            ExplorerControl.DragCommand = new RelayCommand(TreeItemDrag);
+            ExplorerControl.DropCommand = new RelayCommand(TreeItemDrop, CanExecuteTreeItemDrop);
         }
 
         private void OnItemMouseDoubleClick(object sender, MouseButtonEventArgs args)
         {
-            var item = ((TreeViewExItem)sender).DataContext as TreeItem;
-            ((ExplorerViewModel)DataContext).OpenItemAsync(item);
+            var selectedItems = ((ExplorerControl)sender).SelectedItems;
+            if (selectedItems.Any())
+                ((ExplorerViewModel)DataContext).OpenItemAsync(selectedItems[0]);
             args.Handled = true;
         }
 
-        private void OnTreeViewSelecting(object sender, SelectionChangedCancelEventArgs e)
-        {
-            //var viewModel = ((ExplorerViewModel)DataContext);
-            //foreach (var item in e.ItemsToSelect)
-            //    viewModel.SelectedItems.Add((TreeItem)item);
-            //foreach (var item in e.ItemsToUnSelect)
-            //    viewModel.SelectedItems.Remove((TreeItem)item);
-            //viewModel.RefreshContextMenu();
-        }
 
-        private void OnTreeItemEditing(object sender, RoutedEventArgs e)
+        private void OnTreeItemEditing(object sender, Controls.TreeViewItemSelectedEventArgs e)
         {
             ((ExplorerViewModel)DataContext).OnTreeItemEditing();
             e.Handled = true;
         }
 
-        private void OnTreeItemEdited(object sender, RoutedEventArgs e)
+        private void OnTreeItemEdited(object sender, Controls.TreeViewItemSelectedEventArgs e)
         {
-            var item = ((TreeViewExItem)sender).DataContext as TreeItem;
+            var item = (TreeItem)e.SelectedItem.DataContext;
             ((ExplorerViewModel)DataContext).OnTreeItemEdited(item.FullPath, item.Name);
             e.Handled = true;
         }

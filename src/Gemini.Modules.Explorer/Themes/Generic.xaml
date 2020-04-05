@@ -1,0 +1,96 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
+                    xmlns:local="clr-namespace:Gemini.Modules.Explorer.Controls"
+                    xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+                    xmlns:converters="clr-namespace:Gemini.Modules.Shell.Converters;assembly=Gemini"
+                    xmlns:model="clr-namespace:Gemini.Modules.Explorer.Models"
+                    xmlns:ctrl="clr-namespace:Gemini.Modules.MainMenu.Controls;assembly=Gemini">
+    <converters:NullableValueConverter x:Key="NullableValueConverter" />
+    <Style TargetType="local:ExplorerControl">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="local:ExplorerControl">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <TextBox Name="SearchBox">
+                            <behaviors:Interaction.Triggers>
+                                <behaviors:EventTrigger EventName="TextChanged">
+                                    <behaviors:InvokeCommandAction Command="{Binding SearchCommand, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerControl}}}"
+                                                                   CommandParameter="{Binding Text, ElementName=SearchBox}"/>
+                                </behaviors:EventTrigger>
+                            </behaviors:Interaction.Triggers>
+                        </TextBox>
+                        <tvx:TreeViewEx x:Name="PART_TreeView"
+                                        Grid.Row="1"
+                                        DragCommand="{TemplateBinding DragCommand}"
+                                        DropCommand="{TemplateBinding DropCommand}"
+                                        ItemsSource="{TemplateBinding SourceTree}">
+                            <tvx:TreeViewEx.Style>
+                                <Style TargetType="tvx:TreeViewEx">
+                                    <Setter Property="Background" Value="Transparent" />
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="SelectionMode" Value="Multiple" />
+                                    <Setter Property="ItemTemplate">
+                                        <Setter.Value>
+                                            <HierarchicalDataTemplate ItemsSource="{Binding Children}"
+                                                                      DataType="{x:Type model:TreeItem}">
+                                                <DockPanel>
+                                                    <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
+                                                    <TextBlock Text="{Binding Name}" />
+                                                </DockPanel>
+                                            </HierarchicalDataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </tvx:TreeViewEx.Style>
+                            <tvx:TreeViewEx.ItemContainerStyle>
+                                <Style TargetType="tvx:TreeViewExItem">
+                                    <Setter Property="Tag" Value="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type local:ExplorerControl}}}" />
+                                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                    <Setter Property="IsEditing" Value="{Binding IsEditing, Mode=TwoWay}" />
+                                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=OneWayToSource}" />
+                                    <Setter Property="Visibility" Value="{Binding Visibility, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" />
+                                    <Setter Property="TemplateEdit">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <DockPanel>
+                                                    <Image Source="{Binding IconSource, Converter={StaticResource NullableValueConverter}}" Stretch="None" Margin="10 0 5 0" />
+                                                    <tvx:EditTextBox Text="{Binding Name}" />
+                                                </DockPanel>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="ContextMenu">
+                                        <Setter.Value>
+                                            <ctrl:ContextMenuEx DataContext="{Binding PlacementTarget.Tag, RelativeSource={RelativeSource Self}}"
+                                                                ItemsSource="{Binding ContextMenuModel}">
+                                                <ctrl:ContextMenuEx.Style>
+                                                    <Style TargetType="{x:Type ctrl:ContextMenuEx}">
+                                                        <Style.Triggers>
+                                                            <Trigger Property="HasItems" Value="False">
+                                                                <Setter Property="Visibility" Value="Collapsed" />
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ctrl:ContextMenuEx.Style>
+                                                <ctrl:ContextMenuEx.ItemTemplate>
+                                                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                                        <ContentPresenter Content="{Binding Path=Text}" RecognizesAccessKey="True" />
+                                                    </HierarchicalDataTemplate>
+                                                </ctrl:ContextMenuEx.ItemTemplate>
+                                            </ctrl:ContextMenuEx>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </tvx:TreeViewEx.ItemContainerStyle>
+                        </tvx:TreeViewEx>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

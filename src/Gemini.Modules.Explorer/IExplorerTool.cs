@@ -1,5 +1,5 @@
 using Gemini.Framework;
-using Gemini.Framework.Services;
+using Gemini.Modules.Explorer.Models;
 using System.Windows.Input;
 
 namespace Gemini.Modules.Explorer

@@ -1,6 +1,5 @@
 using Gemini.Framework.Commands;
 using Gemini.Framework.Menus;
-using Gemini.Framework.Menus.ContextMenu;
 using Gemini.Framework.Services;
 using Gemini.Modules.MainMenu.Models;
 using System;

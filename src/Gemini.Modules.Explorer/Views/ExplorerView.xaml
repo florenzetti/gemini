@@ -4,19 +4,13 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:dd="clr-namespace:Gemini.Modules.Explorer.Design"
-             xmlns:controls="clr-namespace:Gemini.Modules.MainMenu.Controls;assembly=Gemini"
-             xmlns:tvx="clr-namespace:System.Windows.Controls;assembly=DotNetProjects.TreeViewEx"
-             xmlns:model="clr-namespace:Gemini.Framework.Services;assembly=Gemini"
-             xmlns:properties="clr-namespace:Gemini.Modules.Explorer.Properties"
-             xmlns:views="clr-namespace:Gemini.Modules.Explorer.Views"
-             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+             xmlns:controls1="clr-namespace:Gemini.Modules.Explorer.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance dd:DesignTimeExplorerViewModel, IsDesignTimeCreatable=True}">
-    <UserControl.Resources>
+    <!--<UserControl.Resources>
         <ResourceDictionary Source="../Resources/Styles.xaml" />
-        <!--<converters:NullableValueConverter x:Key="NullableValueConverter" />-->
-    </UserControl.Resources>
+    </UserControl.Resources>-->
     <Grid>
         <Button Content="{Binding OpenSourceButtonText, Mode=OneTime}" Command="{Binding OpenSourceCommand}" VerticalAlignment="Top">
             <Button.Style>
@@ -29,7 +23,24 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Grid>
+        <controls1:ExplorerControl x:Name="ExplorerControl"
+                                   SearchCommand="{Binding SearchCommand, Mode=OneTime}"
+                                   SourceTree="{Binding SourceTree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                   ContextMenuModel="{Binding ContextMenuModel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                                   MouseDoubleClick="OnItemMouseDoubleClick"
+                                   ItemEditing="OnTreeItemEditing"
+                                   ItemEdited="OnTreeItemEdited">
+            <controls1:ExplorerControl.Style>
+                <Style TargetType="{x:Type controls1:ExplorerControl}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsSourceOpened}" Value="False">
+                            <Setter Property="Visibility" Value="Collapsed" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </controls1:ExplorerControl.Style>
+        </controls1:ExplorerControl>
+        <!--<Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />
                 <RowDefinition />
@@ -42,8 +53,8 @@
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Grid.Style>
-            <TextBox Name="SearchBox">
+            </Grid.Style>-->
+            <!--<TextBox Name="SearchBox">
                 <behaviors:Interaction.Triggers>
                     <behaviors:EventTrigger EventName="TextChanged">
                         <behaviors:InvokeCommandAction Command="{Binding SearchCommand}" CommandParameter="{Binding Text, ElementName=SearchBox}"/>
@@ -97,6 +108,6 @@
                     </HierarchicalDataTemplate>
                 </tvx:TreeViewEx.ItemTemplate>
             </tvx:TreeViewEx>
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

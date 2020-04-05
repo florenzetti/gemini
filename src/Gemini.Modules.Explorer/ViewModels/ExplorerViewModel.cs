@@ -1,6 +1,7 @@
 using Caliburn.Micro;
 using Gemini.Framework;
 using Gemini.Framework.Services;
+using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.Explorer.Properties;
 using Gemini.Modules.MainMenu;
 using Gemini.Modules.MainMenu.Models;
@@ -34,7 +35,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         private RelayCommand _searchCommand;
         public ICommand SearchCommand
         {
-            get { return _searchCommand == null ? _searchCommand = new RelayCommand(a => Search(a as string)) : _searchCommand; }
+            get { return _searchCommand ?? (_searchCommand = new RelayCommand(a => Search(a as string))); }
         }
 
         public bool IsSourceOpened => _explorerProvider.IsOpened;
@@ -47,7 +48,7 @@ namespace Gemini.Modules.Explorer.ViewModels
         public TreeItem SourceTree => _explorerProvider.SourceTree;
 
 
-        public MenuModel ContextMenuModel => RefreshContextMenu();
+        public ContextMenuModel ContextMenuModel => RefreshContextMenu();
 
         [ImportingConstructor]
         public ExplorerViewModel(IShell shell,
@@ -70,9 +71,12 @@ namespace Gemini.Modules.Explorer.ViewModels
             DisplayName = Resources.ExplorerText;
         }
 
-        public MenuModel RefreshContextMenu()
+        public ContextMenuModel RefreshContextMenu()
         {
-            var item = _explorerProvider.SourceTree.AllSelectedItems.First();
+            if (!IsSourceOpened)
+                return null;
+
+            var item = _explorerProvider.SourceTree.AllSelectedItems.FirstOrDefault();
             return _menuModels[_explorerProvider.GetTemplate(item)];
         }
 
