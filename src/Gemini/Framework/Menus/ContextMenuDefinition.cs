@@ -3,7 +3,7 @@ using Gemini.Framework.Services;
 using System;
 using System.Windows.Input;
 
-namespace Gemini.Framework.Menus.ContextMenu
+namespace Gemini.Framework.Menus
 {
     public class ContextMenuDefinition : MenuDefinitionBase
     {

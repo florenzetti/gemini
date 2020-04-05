@@ -14,15 +14,15 @@ namespace Gemini.Modules.MainMenu
     {
         private readonly ICommandService _commandService;
         private readonly ContextMenuDefinition[] _menus;
-        private readonly ContextMenuGroupDefinition[] _menuItemGroups;
-        private readonly ContextMenuItemDefinition[] _menuItems;
+        private readonly MenuItemGroupDefinition[] _menuItemGroups;
+        private readonly MenuItemDefinition[] _menuItems;
 
         [ImportingConstructor]
         public ContextMenuBuilder(
             ICommandService commandService,
             [ImportMany] ContextMenuDefinition[] menus,
-            [ImportMany] ContextMenuGroupDefinition[] menuItemGroups,
-            [ImportMany] ContextMenuItemDefinition[] menuItems)
+            [ImportMany] MenuItemGroupDefinition[] menuItemGroups,
+            [ImportMany] MenuItemDefinition[] menuItems)
         {
             _commandService = commandService;
             _menus = menus;
