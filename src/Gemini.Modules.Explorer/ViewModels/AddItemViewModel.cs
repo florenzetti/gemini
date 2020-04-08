@@ -83,7 +83,7 @@ namespace Gemini.Modules.Explorer.ViewModels
             var item = _explorerProvider.CreateItem(fullPath, FileName, _selectedTemplateItem);
             ParentItem.AddChild(item);
             await OpenItemAsync(item);
-            await TryCloseAsync(false);
+            await TryCloseAsync(true);
         }
 
         public Task Cancel() => TryCloseAsync(false);

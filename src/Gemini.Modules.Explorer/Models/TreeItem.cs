@@ -74,25 +74,39 @@ namespace Gemini.Modules.Explorer.Models
         public TreeItem Parent { get; private set; }
         public IReadOnlyList<TreeItem> Children => _children;
 
+        public TreeItem(string name)
+        {
+            Name = name;
+        }
+
         public TreeItem(string fullPath, string name)
         {
             FullPath = fullPath;
             Name = name;
         }
 
-        public void LoadChild(TreeItem item)
-        {
-            item.Parent = this;
-            _children.Add(item);
-        }
-        public void UnloadChild(TreeItem item)
-        {
-            _children.Remove(item);
-        }
+        //public void LoadChild(TreeItem item)
+        //{
+        //    item.Parent = this;
+        //    FullPath = Combine(FullPath, item.Name);
+        //    _children.Add(item);
+        //}
+
+        //public void UnloadChild(TreeItem item)
+        //{
+        //    _children.Remove(item);
+        //}
 
         public virtual void AddChild(TreeItem item)
         {
-            LoadChild(item);
+            //LoadChild(item);
+            //var fullPath = Combine(FullPath, item.Name);
+            //if (Children.Any(o => o.FullPath == fullPath))
+            //    throw new ArgumentException(nameof(FullPath));
+
+            item.Parent = this;
+            //FullPath = fullPath;
+            _children.Add(item);
         }
         public virtual void RemoveChild(TreeItem item)
         {
@@ -108,10 +122,12 @@ namespace Gemini.Modules.Explorer.Models
                 || FindChildRecursive(moveToItem.FullPath) != null) //trying to move to a child folder
                 return;
 
-            Parent.UnloadChild(this);
+            //Parent.UnloadChild(this);
+            Parent.RemoveChild(this);
             Parent = moveToItem;
-            FullPath = Path.Combine(Parent.FullPath, Name);
-            Parent.LoadChild(this);
+            //FullPath = Combine(Parent.FullPath, Name);
+            //Parent.LoadChild(this);
+            Parent.AddChild(this);
         }
         public virtual TreeItem FindChildRecursive(string fullPath)
         {

@@ -1,3 +1,4 @@
+using Gemini.Framework;
 using Gemini.Modules.Explorer.Models;
 using Gemini.Modules.MainMenu.Models;
 using System;
@@ -36,6 +37,7 @@ namespace Gemini.Modules.Explorer.Controls
 
         public static readonly DependencyProperty SearchCommandProperty = DependencyProperty.Register(
             "SearchCommand", typeof(ICommand), typeof(ExplorerControl));
+
         public ICommand SearchCommand
         {
             get { return (ICommand)GetValue(SearchCommandProperty); }
@@ -89,6 +91,7 @@ namespace Gemini.Modules.Explorer.Controls
         public ExplorerControl()
         {
             Resources.Source = new Uri("pack://application:,,,/Gemini.Modules.Explorer;component/Resources/Styles.xaml");
+            SetValue(SearchCommandProperty, new RelayCommand(OnSearchItem));
         }
 
         public override void OnApplyTemplate()
@@ -104,6 +107,11 @@ namespace Gemini.Modules.Explorer.Controls
         {
             var m = ContextMenuModel;
             base.OnContextMenuOpening(e);
+        }
+
+        private void OnSearchItem(object term)
+        {
+            SourceTree.Search(term as string);
         }
 
         private void Item_OnEditing(object sender, RoutedEventArgs e)

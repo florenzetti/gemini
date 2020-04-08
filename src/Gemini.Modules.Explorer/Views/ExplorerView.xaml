@@ -24,7 +24,7 @@
             </Button.Style>
         </Button>
         <controls1:ExplorerControl x:Name="ExplorerControl"
-                                   SearchCommand="{Binding SearchCommand, Mode=OneTime}"
+                                   
                                    SourceTree="{Binding SourceTree, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                    ContextMenuModel="{Binding ContextMenuModel, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                                    MouseDoubleClick="OnItemMouseDoubleClick"

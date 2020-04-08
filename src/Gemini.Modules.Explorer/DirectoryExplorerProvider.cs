@@ -76,7 +76,7 @@ namespace Gemini.Modules.Explorer.Services
         {
             var item = SourceTree.FindChildRecursive(e.OldFullPath);
             item.Name = Path.GetFileName(e.Name);
-            item.FullPath = e.FullPath;
+            //item.FullPath = e.FullPath;
         }
 
         private void OnFileSystemCreated(object sender, FileSystemEventArgs e)
@@ -86,10 +86,12 @@ namespace Gemini.Modules.Explorer.Services
             if (attributes.HasFlag(FileAttributes.Directory))
                 item = LoadRecursive(new DirectoryInfo(e.FullPath));
             else
-                item = new TreeItem(e.FullPath, Path.GetFileName(e.Name));
+                //item = new TreeItem(e.FullPath, Path.GetFileName(e.Name));
+                item = new TreeItem(Path.GetFileName(e.Name));
 
             var parentDirectoryItem = SourceTree.FindChildRecursive(Path.GetDirectoryName(e.FullPath));
-            parentDirectoryItem.LoadChild(item);
+            //parentDirectoryItem.LoadChild(item);
+            parentDirectoryItem.AddChild(item);
         }
 
         public void CloseSource()
@@ -120,7 +122,8 @@ namespace Gemini.Modules.Explorer.Services
             }
             _fsWatcher.EnableRaisingEvents = true;
 
-            return new TreeItem(fullPath, name);
+            //return new TreeItem(fullPath, name);
+            return new TreeItem(name);
         }
 
         public FolderTreeItem CreateFolder(string fullPath, string name)
@@ -135,34 +138,45 @@ namespace Gemini.Modules.Explorer.Services
             return new FolderTreeItem(fullPath, name);
         }
 
-        public void UpdateItem(string fullPath, string newName)
+        public void UpdateItem(TreeItem item, string newName)
         {
-            var newFullPath = Path.Combine(Path.GetDirectoryName(fullPath), newName);
-            MoveItem(fullPath, newFullPath);
+            //var newFullPath = Path.Combine(Path.GetDirectoryName(item.FullPath), newName);
+            item.Name = newName;
+            MoveItem(item, item.Parent);
         }
 
-        public void MoveItem(string fullPath, string newFullPath)
+        public void MoveItem(TreeItem item, TreeItem moveToParent)
         {
-            if (!IsOpened || fullPath == newFullPath)
+            if (!IsOpened || item == moveToParent)
                 return;
+
+            var newFullPath = Path.Combine(moveToParent.FullPath, item.Name);
             _fsWatcher.EnableRaisingEvents = false;
-            if (File.Exists(fullPath))
-                File.Move(fullPath, newFullPath);
-            else if (Directory.Exists(fullPath))
-                Directory.Move(fullPath, newFullPath);
+            if (File.Exists(item.FullPath))
+                File.Move(item.FullPath, newFullPath);
+            else if (Directory.Exists(item.FullPath))
+                Directory.Move(item.FullPath, newFullPath);
+
+            item.FullPath = newFullPath;
+            item.MoveTo(moveToParent);
+
             _fsWatcher.EnableRaisingEvents = true;
         }
 
-        public void DeleteItem(string fullPath)
+        public void DeleteItem(TreeItem item)
         {
             if (!IsOpened)
                 return;
 
             _fsWatcher.EnableRaisingEvents = false;
-            if (Directory.Exists(fullPath))
-                Directory.Delete(fullPath, true);
-            else if (File.Exists(fullPath))
-                File.Delete(fullPath);
+            if (Directory.Exists(item.FullPath))
+                Directory.Delete(item.FullPath, true);
+            else if (File.Exists(item.FullPath))
+                File.Delete(item.FullPath);
+
+            var parentItem = item.Parent;
+            parentItem.RemoveChild(item);
+
             _fsWatcher.EnableRaisingEvents = true;
         }
 
@@ -179,9 +193,12 @@ namespace Gemini.Modules.Explorer.Services
             };
 
             foreach (var folder in rootDirectory.GetDirectories())
-                result.LoadChild(LoadRecursive(folder, false));
+                //result.LoadChild(LoadRecursive(folder, false));
+                result.AddChild(LoadRecursive(folder, false));
             foreach (var file in rootDirectory.GetFiles())
-                result.LoadChild(new TreeItem(file.FullName, file.Name));
+                //result.LoadChild(new TreeItem(file.FullName, file.Name));
+                result.AddChild(new TreeItem(file.FullName, file.Name));
+
 
             return result;
         }

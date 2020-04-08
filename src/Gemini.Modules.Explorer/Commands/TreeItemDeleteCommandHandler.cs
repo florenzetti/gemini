@@ -27,9 +27,7 @@ namespace Gemini.Modules.Explorer.Commands
             {
                 foreach (var selectedItem in _explorerProvider.SourceTree.GetAllRecursive().Where(o => o.IsSelected))
                 {
-                    _explorerProvider.DeleteItem(selectedItem.FullPath);
-                    var parentItem = selectedItem.Parent;
-                    parentItem.RemoveChild(selectedItem);
+                    _explorerProvider.DeleteItem(selectedItem);
                 }
             }
             return TaskUtility.Completed;

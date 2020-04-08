@@ -15,8 +15,8 @@ namespace Gemini.Modules.Explorer
         EditorFileTemplate GetTemplate(TreeItem item);
         TreeItem CreateItem(string fullPath, string name, EditorFileTemplate fileTemplate);
         FolderTreeItem CreateFolder(string fullPath, string name);
-        void UpdateItem(string fullPath, string newName);
-        void MoveItem(string fullPath, string newFullPath);
-        void DeleteItem(string fullPath);
+        void UpdateItem(TreeItem item, string newName);
+        void MoveItem(TreeItem item, TreeItem moveToParent);
+        void DeleteItem(TreeItem item);
     }
 }

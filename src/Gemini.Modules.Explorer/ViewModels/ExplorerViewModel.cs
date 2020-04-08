@@ -133,18 +133,16 @@ namespace Gemini.Modules.Explorer.ViewModels
         {
         }
 
-        public void OnTreeItemEdited(string fullPath, string newName)
+        public void OnTreeItemEdited(TreeItem item, string newName)
         {
-            _explorerProvider.UpdateItem(fullPath, newName);
+            _explorerProvider.UpdateItem(item, newName);
         }
 
         public void OnTreeItemsMoved(TreeItem moveToParent, IEnumerable<TreeItem> itemsMoved)
         {
             foreach (var item in itemsMoved)
             {
-                string oldFullPath = item.FullPath;
-                item.MoveTo(moveToParent);
-                _explorerProvider.MoveItem(oldFullPath, item.FullPath);
+                _explorerProvider.MoveItem(item, moveToParent);
             }
         }
 

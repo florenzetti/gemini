@@ -42,7 +42,7 @@ namespace Gemini.Modules.Explorer.Views
         private void OnTreeItemEdited(object sender, Controls.TreeViewItemSelectedEventArgs e)
         {
             var item = (TreeItem)e.SelectedItem.DataContext;
-            ((ExplorerViewModel)DataContext).OnTreeItemEdited(item.FullPath, item.Name);
+            ((ExplorerViewModel)DataContext).OnTreeItemEdited(item, item.Name);
             e.Handled = true;
         }
 

@@ -33,7 +33,6 @@ namespace Gemini.Modules.Explorer.Models
         }
 
         public FolderTreeItem(string fullPath, string name) : base(fullPath, name)
-        {
-        }
+        { }
     }
 }
