@@ -9,7 +9,7 @@ using System.Windows;
 
 namespace Gemini.Modules.Explorer.Models
 {
-    public class TreeItem : PropertyChangedBase, IEnumerable<TreeItem>
+    public class TreeItem : PropertyChangedBase, IEnumerable<TreeItem>, ISearchable
     {
         private readonly BindableCollection<TreeItem> _children = new BindableCollection<TreeItem>();
 
@@ -58,6 +58,17 @@ namespace Gemini.Modules.Explorer.Models
                 NotifyOfPropertyChange(() => IsEditing);
             }
         }
+        private bool _isExpanded;
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                _isExpanded = value;
+                NotifyOfPropertyChange(() => IsExpanded);
+                NotifyOfPropertyChange(() => IconSource);
+            }
+        }
         public virtual Uri IconSource => IconSourceUtility.GetByExtension(Path.GetExtension(Name), 16);
         public virtual bool CanOpenDocument => true;
         private Visibility _visibility;
@@ -74,38 +85,16 @@ namespace Gemini.Modules.Explorer.Models
         public TreeItem Parent { get; private set; }
         public IReadOnlyList<TreeItem> Children => _children;
 
-        public TreeItem(string name)
-        {
-            Name = name;
-        }
-
         public TreeItem(string fullPath, string name)
         {
             FullPath = fullPath;
             Name = name;
+            IsExpanded = false;
         }
-
-        //public void LoadChild(TreeItem item)
-        //{
-        //    item.Parent = this;
-        //    FullPath = Combine(FullPath, item.Name);
-        //    _children.Add(item);
-        //}
-
-        //public void UnloadChild(TreeItem item)
-        //{
-        //    _children.Remove(item);
-        //}
 
         public virtual void AddChild(TreeItem item)
         {
-            //LoadChild(item);
-            //var fullPath = Combine(FullPath, item.Name);
-            //if (Children.Any(o => o.FullPath == fullPath))
-            //    throw new ArgumentException(nameof(FullPath));
-
             item.Parent = this;
-            //FullPath = fullPath;
             _children.Add(item);
         }
         public virtual void RemoveChild(TreeItem item)
@@ -122,11 +111,8 @@ namespace Gemini.Modules.Explorer.Models
                 || FindChildRecursive(moveToItem.FullPath) != null) //trying to move to a child folder
                 return;
 
-            //Parent.UnloadChild(this);
             Parent.RemoveChild(this);
             Parent = moveToItem;
-            //FullPath = Combine(Parent.FullPath, Name);
-            //Parent.LoadChild(this);
             Parent.AddChild(this);
         }
         public virtual TreeItem FindChildRecursive(string fullPath)

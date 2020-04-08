@@ -4,19 +4,8 @@ namespace Gemini.Modules.Explorer.Models
 {
     public class FolderTreeItem : TreeItem
     {
-        public virtual bool IsRootFolder { get; }
+        public virtual bool IsRootFolder => Parent == null;
 
-        private bool _isExpanded;
-        public bool IsExpanded
-        {
-            get => _isExpanded;
-            set
-            {
-                _isExpanded = value;
-                NotifyOfPropertyChange(() => IsExpanded);
-                NotifyOfPropertyChange(() => IconSource);
-            }
-        }
         public override bool CanOpenDocument => false;
 
         public override Uri IconSource

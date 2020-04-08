@@ -86,11 +86,10 @@ namespace Gemini.Modules.Explorer.Services
             if (attributes.HasFlag(FileAttributes.Directory))
                 item = LoadRecursive(new DirectoryInfo(e.FullPath));
             else
-                //item = new TreeItem(e.FullPath, Path.GetFileName(e.Name));
-                item = new TreeItem(Path.GetFileName(e.Name));
+                item = new TreeItem(e.FullPath, Path.GetFileName(e.Name));
+                //item = new TreeItem(Path.GetFileName(e.Name));
 
             var parentDirectoryItem = SourceTree.FindChildRecursive(Path.GetDirectoryName(e.FullPath));
-            //parentDirectoryItem.LoadChild(item);
             parentDirectoryItem.AddChild(item);
         }
 
@@ -123,7 +122,7 @@ namespace Gemini.Modules.Explorer.Services
             _fsWatcher.EnableRaisingEvents = true;
 
             //return new TreeItem(fullPath, name);
-            return new TreeItem(name);
+            return new TreeItem(fullPath, name);
         }
 
         public FolderTreeItem CreateFolder(string fullPath, string name)
